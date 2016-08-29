@@ -1,10 +1,9 @@
 /*
- * Copyright 2015 Anthony Gabriel
- * Released under the MIT license
+ * @github "cgabriel5"
  * @description "a simple js selector engine"
  * @name "funnel.js"
  * @version "0.0.1"
- * @notes "not production ready. just a personal project for now. :)"
+ * @notes "not production ready. just a personal project for now... :)"
  */
 (function() {
     "use strict";
