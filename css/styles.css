@@ -1,0 +1,69 @@
+/* [----- CSS.RESET.START -----] */
+/* [box_sizing.styles](https://css-tricks.com/box-sizing/) */
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+:before,
+:after {
+    box-sizing: inherit;
+}
+
+body {
+    font: 400 16px/1.5 Lato;
+    margin: 0;
+    color: #2d3c49;
+}
+
+:focus {
+    /* remove default outline [http://stackoverflow.com/questions/17324960/copy-chrome-default-inputs-outline-style] */
+    outline: none;
+}
+
+/* [----- CSS.RESET.END -----] */
+
+/* [----- CSS.SITE.STYLES.START -----] */
+
+.none {
+    display: none;
+}
+
+.temp {
+    left: 60px;
+    padding: 30px;
+    background: blue;
+    color: white;
+    position: absolute;
+    box-shadow: rgb(55, 55, 55) 0 10px 10px 0;
+}
+
+.teigger {
+    background: purple;
+    padding: 3px;
+    color: white;
+}
+
+.tape {
+    padding: 20px;
+    border: 4px solid red;
+    margin: 4px;
+}
+
+.red {
+    background: red;
+    padding: 10px;
+}
+
+.orange {
+    background: orange;
+    padding: 30px;
+}
+
+.purple {
+    background: purple;
+    padding: 10px;
+}
+
+/* [----- CSS.SITE.STYLES.END -----] */
