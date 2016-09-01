@@ -23,6 +23,12 @@ Simple, standalone, lightweight JavaScript selector engine.
 // only focusing on a section of the page.
 ```
 
+### Access selector
+```js
+// access/cache selector
+var f = window.app.funnel;
+```
+
 ### Example Queries
 ```js
 // 1) uses the elements with id "tape" and "file" as source points
@@ -105,7 +111,7 @@ f("#red:all").children().attrs("'type=file'").pop();
 //    using :all gets ALL the elements descendants rather than the
 //    the element itself
 // 2) get the children of the collection
-// 3) use the attrs() filter to return elements with the attribute "class" 
+// 3) use the attrs() filter to return elements with the attribute "class"
 //    (the attribute value in this query is not checked, simply checks if the element HAS the attribute)
 // 4) return the collection for use with pop()
 f("#red:all").children().attrs("'class'").pop();
