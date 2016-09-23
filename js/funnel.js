@@ -6,6 +6,25 @@
         // =============================== Helper Functions
 
         /**
+         * @description [Returns index of given value in provided array.]
+         * @param  {Array}    array [The array to check against.]
+         * @param  {Integer}  value [The value to check.]
+         * @return {Integer}        [Returns the index value. -1 if not in array.]
+         */
+        function index(array, value) {
+            return array.indexOf(value);
+        }
+        /**
+         * @description [Checks if the given value is in provided array.]
+         * @param  {Array}   array [The array to check against.]
+         * @param  {Integer} value [The value to check.]
+         * @return {Boolean}       [description]
+         * @source [https://www.joezimjs.com/javascript/great-mystery-of-the-tilde/]
+         */
+        function in_array(array, value) {
+            return -~index(array, value);
+        }
+        /**
          * @description [Makes an Array from an array like object (ALO). ALO must have a length property
          *               for it to work.]
          * @param  {ALO} alo [The ALO.]
@@ -18,6 +37,109 @@
             for (var i = 0, l = alo.length; i < l; i++) true_array.push(alo[i]);
             return true_array;
         }
+        /**
+         * @description [Checks if the supplied arrays have any items in common, or intersect.]
+         * @param  {Array}   array1 [The first array to perform comparison with.]
+         * @param  {Array}   array2 [The second array to perform comparison with.]
+         * @return {Boolean}        [description]
+         */
+        function intersect(array1, array2) {
+            // define vars
+            var short_array = array1,
+                long_array = array2,
+                i = 0,
+                l, a1_len = array1.length,
+                a2_len = array2.length;
+            // reset short and long arrays if arrays are equal in...
+            // ...length or if length of first array is less than that...
+            // ...of the second one.
+            if (a1_len === a2_len || a1_len < a2_len) {
+                short_array = array2;
+                long_array = array1;
+            }
+            // use length of short array as the last iteration stop.
+            // finally, check if arrays have anything in common.
+            // returning true if a commonality is found. otherwise return false
+            l = short_array.length;
+            for (; i < l; i++)
+                if (in_array(long_array, short_array[i])) return true;
+            return false;
+        }
+        /**
+         * @description [Internal helper function. Is used when the "tags", "classes", or "text" filters are invoked.]
+         * @param  {Array}          _    [The internal element collection stack.]
+         * @param  {String}         type [The name of the filter being passed. (i.e. tags|classes|text)]
+         * @param  {ArgumentsArray} a    [The passed in arguments object.]
+         * @return {Array}               [Returns the filtered element collection stack.]
+         */
+        var helper_one = function(_, type, a) {
+            /**
+             * @description [Cleans the provided tags into has and nothas arrays]
+             * @param  {Array}  args [The array of tags provided, both has and nothas]
+             * @return {Object}      [An object containing the cleaned tags]
+             */
+            var input = function(args) {
+
+                    // loop through arguments and seprate between has and nots
+                    // i.e. -> ["!input", "canvas"] -> has:["canvas"], not:["input"]
+                    for (var has = [], not = [], current_item, i = 0, l = args.length; i < l; i++) {
+                        current_item = args[i];
+                        (current_item.charCodeAt(0) !== 33) ? has.push(current_item): not.push(current_item.substring(1));
+                    }
+                    return { "has": has, "not": not };
+
+                },
+                has = function(elements, type, has_not, filter, reverse) {
+                    for (var current_element, screened = [], i = 0, l = elements.length; i < l; i++) {
+                        current_element = elements[i];
+                        if (filter(current_element, has_not, reverse)) screened.push(current_element);
+                    }
+                    return screened;
+                },
+                filters = {
+                    tags: function(element, has_not, reverse) {
+                        var check = in_array(has_not, element.tagName.toLowerCase());
+                        // reverse for the not checks
+                        if (reverse) check = !check;
+                        if (check) return element;
+                    },
+                    text: function(element, has_not, reverse) {
+                        var cc, f, func;
+                        for (var i = 0, l = has_not.length; i < l; i++) {
+                            cc = has_not[i];
+                            f = in_array(element.textContent, cc);
+                            // if the reverse parameter is supplied we need to return the opposite of the function
+                            func = (reverse) ? f : !f;
+                            if (func) return;
+                            if (i === l - 1) return element;
+                        }
+                    },
+                    classes: function(element, has_not, reverse) {
+                        var cc, f, func, class_list = " " + element.className + " ";
+                        for (var i = 0, l = has_not.length; i < l; i++) {
+                            cc = has_not[i];
+                            if (typeof cc === "object") { // for has only
+                                if (class_list === "  ") return;
+                                if (!intersect(class_list.trim().split(" "), cc, element)) return;
+                            } else {
+                                f = in_array(class_list, " " + cc + " ");
+                                // if the reverse parameter is supplied we need to return the opposite of the function
+                                func = (reverse) ? f : !f;
+                                if (func) return;
+                            }
+                            if (i === l - 1) return element;
+                        }
+                    }
+                };
+
+            var elements,
+                array = _.stack[_.stack.length - 1],
+                args = input(a);
+
+            if (args.has.length) elements = has(array, type, args.has, filters[type]);
+            if (args.not.length) elements = has((elements || array), type, args.not, filters[type], true /*reverse check*/ );
+            return elements;
+        };
 
         // =============================== Selector Class
 
@@ -318,6 +440,23 @@
 
                     // only returns for constructor
                     if (source) return elements;
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
+                /**
+                 * @description [Screens collection of elements against provided tags.]
+                 * @param  {Strings}  source [N amount of tag names in the form of strings.]
+                 * @return {Object}  [Return self to allow method chaining.]
+                 */
+                "tags": function() {
+
+                    // define vars
+                    var elements = helper_one(this, "tags", arguments),
+                        this_ = this;
 
                     // add elements to selector object
                     this_.stack.push(elements);
