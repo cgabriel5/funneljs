@@ -294,6 +294,37 @@
                     return this_;
 
                 },
+                /**
+                 * @description [Gets the element to the left, or previous, of elements in stack.]
+                 * @param  {Array}  source [A source point element contained in an array. **Source parameter
+                 *                          is only present when running the constructor. Chaining methods
+                 *                          does not provide the source parameter. Thus allowing the method to
+                 *                          be chainable.]
+                 * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
+                                            self to allow method chaining.]
+                 */
+                "prev": function(source) {
+
+                    // define vars
+                    var elements = [],
+                        this_ = this,
+                        l = (source) ? source.length : this_.length,
+                        array = (source) ? source : this_.stack[this_.stack.length - 1];
+
+                    // loop through the elements getting all the current element's right adjacent element.
+                    for (var i = 0; i < l; i++) {
+                        elements.push(array[i].previousElementSibling);
+                    }
+
+                    // only returns for constructor
+                    if (source) return elements;
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
             },
 
             // class to extend
