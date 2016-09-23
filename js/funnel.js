@@ -68,7 +68,7 @@
                  * @param  {Array}  source [A source point element contained in an array. **Source parameter
                  *                          is only present when running the constructor. Chaining methods
                  *                          does not provide the source parameter. Thus allowing the method to
-                 *                          be chainable..]
+                 *                          be chainable.]
                  * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
                  *                          self to allow method chaining.]
                  */
@@ -99,7 +99,7 @@
                  * @param  {Array}  source [A source point element contained in an array. **Source parameter
                  *                          is only present when running the constructor. Chaining methods
                  *                          does not provide the source parameter. Thus allowing the method to
-                 *                          be chainable..]
+                 *                          be chainable.]
                  * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
                                             self to allow method chaining.]
                  */
@@ -118,6 +118,37 @@
                         for (var j = 0, ll = child_nodes.length; j < ll; j++) {
                             if (child_nodes[j].nodeType === 3 && child_nodes[j].textContent.trim().length) elements.push(child_nodes[j]);
                         }
+                    }
+
+                    // only returns for constructor
+                    if (source) return elements;
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
+                /**
+                 * @description [Get the parent node of all elements in stack.]
+                 * @param  {Array}  source [A source point element contained in an array. **Source parameter
+                 *                          is only present when running the constructor. Chaining methods
+                 *                          does not provide the source parameter. Thus allowing the method to
+                 *                          be chainable.]
+                 * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
+                                            self to allow method chaining.]
+                 */
+                parent: function(source) {
+
+                    // define vars
+                    var elements = [],
+                        this_ = this,
+                        l = (source) ? source.length : this_.length,
+                        array = (source) ? source : this_.stack[this_.stack.length - 1];
+
+                    // Loop through the elements getting their parents. Only the first parent is gotten.
+                    for (var i = 0; i < l; i++) {
+                        elements.push(array[i].parentNode);
                     }
 
                     // only returns for constructor
