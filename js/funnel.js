@@ -146,9 +146,44 @@
                         l = (source) ? source.length : this_.length,
                         array = (source) ? source : this_.stack[this_.stack.length - 1];
 
-                    // Loop through the elements getting their parents. Only the first parent is gotten.
+                    // loop through the elements getting their parents. only the first parent is gotten.
                     for (var i = 0; i < l; i++) {
                         elements.push(array[i].parentNode);
+                    }
+
+                    // only returns for constructor
+                    if (source) return elements;
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
+                /**
+                 * @description [Get all parent nodes of all elements in stack.]
+                 * @param  {Array}  source [A source point element contained in an array. **Source parameter
+                 *                          is only present when running the constructor. Chaining methods
+                 *                          does not provide the source parameter. Thus allowing the method to
+                 *                          be chainable.]
+                 * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
+                                            self to allow method chaining.]
+                 */
+                parents: function(source) {
+
+                    // define vars
+                    var elements = [],
+                        this_ = this,
+                        l = (source) ? source.length : this_.length,
+                        array = (source) ? source : this_.stack[this_.stack.length - 1];
+
+                    // loop through the elements getting all their parents.
+                    for (var current_element, i = 0; i < l; i++) {
+                        current_element = array[i];
+                        while (current_element) {
+                            current_element = current_element.parentNode;
+                            if (current_element) elements.push(current_element);
+                        }
                     }
 
                     // only returns for constructor
