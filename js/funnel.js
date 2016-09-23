@@ -226,6 +226,43 @@
                     return this_;
 
                 },
+                /**
+                 * @description [Get all the siblings of elements in stack.]
+                 * @param  {Array}  source [A source point element contained in an array. **Source parameter
+                 *                          is only present when running the constructor. Chaining methods
+                 *                          does not provide the source parameter. Thus allowing the method to
+                 *                          be chainable.]
+                 * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
+                                            self to allow method chaining.]
+                 */
+                siblings: function(source) {
+
+                    // define vars
+                    var elements = [],
+                        this_ = this,
+                        l = (source) ? source.length : this_.length,
+                        array = (source) ? source : this_.stack[this_.stack.length - 1];
+
+                    // loop through the elements getting the current elements siblings.
+                    // the current element is skipped and not pushed into the set of screened elements.
+                    for (var first_element, current_element, i = 0; i < l; i++) {
+                        current_element = array[i];
+                        first_element = current_element.parentNode.firstChild;
+                        while (first_element) {
+                            first_element = first_element.nextElementSibling;
+                            if (first_element !== current_element && first_element) elements.push(first_element);
+                        }
+                    }
+
+                    // only returns for constructor
+                    if (source) return elements;
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
             },
 
             // class to extend
