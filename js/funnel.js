@@ -89,55 +89,60 @@
                     return { "has": has, "not": not };
 
                 },
-                has = function(elements, type, has_not, filter, reverse) {
-                    for (var current_element, screened = [], i = 0, l = elements.length; i < l; i++) {
+                /**
+                 * @description [Filters element stack with either tags|text|classes filters.]
+                 * @param  {Array}    elements [The elements stack to filter.]
+                 * @param  {Array}    has_not  [The array of tags|text|classes to filter against.]
+                 * @param  {Function} filter   [The filter function to use.]
+                 * @param  {Boolean}  reverse  [Reverse for not use (!).]
+                 * @return {Array}             [The filtered elements.]
+                 */
+                has = function(elements, has_not, filter, reverse) {
+                    for (var current_element, filtered = [], i = 0, l = elements.length; i < l; i++) {
                         current_element = elements[i];
-                        if (filter(current_element, has_not, reverse)) screened.push(current_element);
+                        if (filter(current_element, has_not, reverse)) filtered.push(current_element);
                     }
-                    return screened;
+                    return filtered;
                 },
                 filters = {
                     tags: function(element, has_not, reverse) {
                         var check = in_array(has_not, element.tagName.toLowerCase());
                         // reverse for the not checks
                         if (reverse) check = !check;
-                        if (check) return element;
+                        if (check) return true;
                     },
                     text: function(element, has_not, reverse) {
                         var cc, f, func;
                         for (var i = 0, l = has_not.length; i < l; i++) {
                             cc = has_not[i];
                             f = in_array(element.textContent, cc);
-                            // if the reverse parameter is supplied we need to return the opposite of the function
+                            // reverse for the not checks
                             func = (reverse) ? f : !f;
                             if (func) return;
-                            if (i === l - 1) return element;
+                            if (i === l - 1) return true;
                         }
                     },
                     classes: function(element, has_not, reverse) {
-                        var cc, f, func, class_list = " " + element.className + " ";
-                        for (var i = 0, l = has_not.length; i < l; i++) {
-                            cc = has_not[i];
-                            if (typeof cc === "object") { // for has only
-                                if (class_list === "  ") return;
-                                if (!intersect(class_list.trim().split(" "), cc, element)) return;
-                            } else {
-                                f = in_array(class_list, " " + cc + " ");
-                                // if the reverse parameter is supplied we need to return the opposite of the function
-                                func = (reverse) ? f : !f;
-                                if (func) return;
-                            }
-                            if (i === l - 1) return element;
+                        for (var current_class, i = 0, l = has_not.length; i < l; i++) {
+                            current_class = has_not[i];
+                            var check = in_array((" " + element.className + " "), (" " + current_class + " "));
+                            // reverse for the not checks
+                            if (reverse) check = !check;
+                            if (!check) return; // fails to have a class we return
+                            if (i === l - 1) return true; // must have all classes specified,
+                                                          // if last check and has class
                         }
                     }
                 };
+
+            // console.log(">>>>", input(a));
 
             var elements,
                 array = _.stack[_.stack.length - 1],
                 args = input(a);
 
-            if (args.has.length) elements = has(array, type, args.has, filters[type]);
-            if (args.not.length) elements = has((elements || array), type, args.not, filters[type], true /*reverse check*/ );
+            if (args.has.length) elements = has(array, args.has, filters[type]);
+            if (args.not.length) elements = has((elements || array), args.not, filters[type], true /*reverse check*/ );
             return elements;
         };
 
@@ -456,6 +461,23 @@
 
                     // define vars
                     var elements = helper_one(this, "tags", arguments),
+                        this_ = this;
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
+                /**
+                 * @description [Screens collection of elements against provided classes.]
+                 * @param  {Strings}  source [N amount of tag names in the form of strings.]
+                 * @return {Object}  [Return self to allow method chaining.]
+                 */
+                "classes": function() {
+
+                    // define vars
+                    var elements = helper_one(this, "classes", arguments),
                         this_ = this;
 
                     // add elements to selector object
