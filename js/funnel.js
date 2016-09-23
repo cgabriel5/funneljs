@@ -138,7 +138,7 @@
                  * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
                                             self to allow method chaining.]
                  */
-                parent: function(source) {
+                "parent": function(source) {
 
                     // define vars
                     var elements = [],
@@ -169,7 +169,7 @@
                  * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
                                             self to allow method chaining.]
                  */
-                parents: function(source) {
+                "parents": function(source) {
 
                     // define vars
                     var elements = [],
@@ -204,7 +204,7 @@
                  * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
                                             self to allow method chaining.]
                  */
-                children: function(source) {
+                "children": function(source) {
 
                     // define vars
                     var elements = [],
@@ -235,7 +235,7 @@
                  * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
                                             self to allow method chaining.]
                  */
-                siblings: function(source) {
+                "siblings": function(source) {
 
                     // define vars
                     var elements = [],
@@ -252,6 +252,37 @@
                             first_element = first_element.nextElementSibling;
                             if (first_element !== current_element && first_element) elements.push(first_element);
                         }
+                    }
+
+                    // only returns for constructor
+                    if (source) return elements;
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
+                /**
+                 * @description [Gets the element to the right, or next, of elements in stack.]
+                 * @param  {Array}  source [A source point element contained in an array. **Source parameter
+                 *                          is only present when running the constructor. Chaining methods
+                 *                          does not provide the source parameter. Thus allowing the method to
+                 *                          be chainable.]
+                 * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
+                                            self to allow method chaining.]
+                 */
+                "next": function(source) {
+
+                    // define vars
+                    var elements = [],
+                        this_ = this,
+                        l = (source) ? source.length : this_.length,
+                        array = (source) ? source : this_.stack[this_.stack.length - 1];
+
+                    // loop through the elements getting all the current element's right adjacent element.
+                    for (var i = 0; i < l; i++) {
+                        elements.push(array[i].nextElementSibling);
                     }
 
                     // only returns for constructor
