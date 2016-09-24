@@ -526,6 +526,51 @@
                     return this_;
 
                 },
+                /**
+                 * @description [Positional filter which screens elements based on a provided range.]
+                 * @param  {Array}  range [The provided range to work with in the form [start, stop, step].]
+                 * @return {Object}  [Return self to allow method chaining.]
+                 * @example :even range => [0, -1, 2]
+                 * @example :odd range => [1, -1, 2]
+                 * @example :entire range => [0, -1, 1]
+                 * @example :< 3 range => [0, 3, 1]
+                 * @example :> 4 range => [4, -1, 1]
+                 */
+                "range": function(range) {
+
+                    // define vars
+                    var elements = [],
+                        this_ = this,
+                        array = this_.stack[this_.stack.length - 1],
+                        l = array.length;
+                    // cache range parts
+                    var start = range[0],
+                        stop = range[1] + 1,
+                        step = (range[2] || 1);
+
+                    // if the stop is set to -1 or the range provided is larger than the length of the
+                    // elements array we need to reset the stop from -1 to the length of the elements array.
+                    // [1] The user wants to cycle through all the elements.
+                    // [2] Range exceeds length of the elements array.
+                    if ( /*[1]*/ !~range[1] || /*[2]*/ stop > l) stop = l;
+
+                    // if provided start is larger than the elements array we reset it to 0.
+                    if (start > l) start = 0;
+
+                    // Loop through using the provided start, stop, and step values.
+                    for (var elements = [], i = start; i < stop;) {
+                        elements.push(array[i]);
+                        i = i + step;
+                    }
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
+                /** @description [Empty method; added to mask object as an array.] */
+                // splice: function() { /* noop */ },
             },
 
             // class to extend
