@@ -1,126 +1,186 @@
 # funneljs
 Simple, standalone, lightweight JavaScript selector engine.
 
-### How It Works
-```js
-// use in the form of...
-// <source_point(s)>.<filter1>.<filter2>.<filtern>.<pop>;
-
-// example...
-// f("#aside:all").tags("span", "div").pop();
-
-// query explanation...
-// 1) query uses the element with the id of "aside" as its source point*
-//    the ":all" means to grab ALL its descendants elements
-// 2) now that we have all the descendants, we use the .tags() filter
-//    to only get elements with the tag-type of "span" and "div"
-// 3) finally, return the collection with the pop() method
-
-// *What is a source point?
-// A source point is a element in which the query will focus on.
-// As querying the DOM is an expensive task, a source point prevents
-// scanning the entire DOM in search of the your queried elements while
-// only focusing on a section of the page.
+### Add to project
+```html
+<script src="my_js_directory_path/funnel.js"></script>
 ```
-
 ### Access selector
 ```js
-// access/cache selector
-var f = window.app.funnel;
+var f = funneljs;
+// or
+var f = window.funneljs;
+```
+### Selector Methods
+**Selector.all** &mdash; gets children + descendants of elements in last stack.
+```js
+// can be combined with source element
+var query = f("#aside:all");
+// or used as a chained method
+var query = f("#aside").all();
+```
+**Selector.attrs** &mdash; gets elements matching all supplied attributes.
+```js
+// get all elements contained in aside element
+var query = f("#aside:all");
+
+// now we filter wanted elements...
+
+// example 1: gets elements that HAVE a class attribute
+var filtered = query.attrs("[class]");
+
+// example 2: gets elements that DO NOT have a class sttribute
+var filtered = query.attrs("[!class]");
+// **Note: not(!) only checks for absence of attribute
+
+// example 3: gets elements with a type attribute AND value equal to text
+var filtered = query.attrs("[type=text]");
+
 ```
 
-### Example Queries
+**Selector.children** &mdash; gets element's children.
 ```js
-// 1) uses the elements with id "tape" and "file" as source points
-// 2) no filters are applied. therefore invoking pop() will only
-//    return the provided source elements
-f('#tape #file').pop();
+// get aside element
+var query = f("#aside");
+// get children
+var next = query.children();
+```
 
-// 1) uses the element with id "tape" as a source point.
-//    using :all gets ALL the elements descendants rather than the
-//    the element itself
-// 2) of the descendants filter out any that contain the class "active"
-// 3) return the collection for use with pop()
-f('#red:all').classes('!active').pop();
+**Selector.classes** &mdash; gets elements matching any of the supplied classes.
+```js
+// get all elements contained in aside element
+var query = f("#aside:all");
 
-// 1) uses the element with id "tape" as a source point.
-//    using :all gets ALL the elements descendants rather than the
-//    the element itself
-// 2) get form type elements of the type checkbox
-// 3) state(), in this case, will only return non checked elements
-// 4) return the collection for use with pop()
-f("#red:all").form(":checkbox").state("checked", false).pop();
+// example 1: gets elements with the classes active & nav-item
+var filtered = query.classes("active", "nav-item");
 
-// 1) uses the element with id "tape" as a source point.
-//    using :all gets ALL the elements descendants rather than the
-//    the element itself
-// 2) get form type elements of the type checkbox
-// 3) state(), in this case, will only return non checked elements
-// 4) state(), in this case, will only return non visible elements
-// 5) return the collection for use with pop()
-f("#red:all").form(":checkbox").state("checked", false).state("visible", false).pop();
+// example 2: gets everything bu elements with the classes active and nav-item
+var filtered = query.classes("!active", "!nav-item");
+```
 
-// 1) uses the element with id "tape" as a source point.
-//    using :all gets ALL the elements descendants rather than the
-//    the element itself
-// 2) get form type elements of the type checkbox
-// 3) state(), in this case, will only return non checked elements
-// 4) state(), in this case, will only return visible elements
-// 5) return the collection for use with pop()
-f("#red:all").form(":checkbox").state("checked", false).state("visible", true).pop();
+**Selector.form** &mdash; Selector.attr shorthand.
+(List of possible input types [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input) and [here](http://www.w3schools.com/TAGS/att_input_type.asp))
+```js
+// get all elements contained in aside element
+var query = f("#aside:all");
 
-// 1) uses the element with id "pink" as a source point.
-// 2) get the source point elements siblings
-// 3) return the collection for use with pop()
-f("#pink").siblings().pop();
+// example 1: gets elements that have a type attribute and value text => [type=text]
+var filtered = query.form(":text");
+// shorthand for...
+var filtered = query.attrs("[type=text]");
+```
 
-// 1) uses the element with id "red" as a source point.
-// 2) get the source points parent
-// 3) return the collection for use with pop()
-f("#red").parent().pop();
+**Selector.next** &mdash; gets the next element sibling of elements in last stack.
+```js
+// get aside element
+var query = f("#aside1");
+// get sibling to the right
+var next = query.next(); // i.e. #aside2
+// **Note: if no element exists null is substituted
+```
 
-// 1) uses the element with id "red" as a source point.
-// 2) get the source points parents
-// 3) return the collection for use with pop()
-f("#red").parents().pop();
+**Selector.only** &mdash; filters out any element not in provided indices..
+```js
+// get all elements contained in aside element
+var query = f("#aside:all");
+// only gets elements at indices 0, 1, 2 or the first 3 elements
+var filtered = query.only([0, 1, 2]);
+```
 
-// 1) uses the element with id "tape" as a source point.
-//    using :all gets ALL the elements descendants rather than the
-//    the element itself
-// 2) use the tag() filter to return elements of tag-type "input"
-// 3) return the collection for use with pop()
-f("#red:all").tags("input").pop();
+**Selector.parent** &mdash; gets element's parent.
+```js
+// get aside element
+var query = f("#aside");
+// get parent
+var next = query.parent();
+```
 
-// 1) uses the element with id "tape" as a source point.
-//    using :all gets ALL the elements descendants rather than the
-//    the element itself
-// 2) use the tag() filter to return elements of tag-type "form"
-// 3) get the children of the collection
-// 4) return the collection for use with pop()
-f("#red:all").tags("form").children().pop();
+**Selector.parents** &mdash; gets element's parents.
+```js
+// get aside element
+var query = f("#aside");
+// get parents
+var next = query.parents();
+```
 
-// 1) uses the element with id "tape" as a source point.
-//    using :all gets ALL the elements descendants rather than the
-//    the element itself
-// 2) get the children of the collection
-// 3) use the attrs() filter to return elements with the attribute "type=file"
-// 4) return the collection for use with pop()
-f("#red:all").children().attrs("'type=file'").pop();
+**Selector.pop** &mdash; returns elements for use.
+```js
+query.pop(); // returns elements are contained in an array
+```
 
-// 1) uses the element with id "tape" as a source point.
-//    using :all gets ALL the elements descendants rather than the
-//    the element itself
-// 2) get the children of the collection
-// 3) use the attrs() filter to return elements with the attribute "class"
-//    (the attribute value in this query is not checked, simply checks if the element HAS the attribute)
-// 4) return the collection for use with pop()
-f("#red:all").children().attrs("'class'").pop();
+**Selector.prev** &mdash; gets the previous element sibling of elements in last stack.
+```js
+// get aside element
+var query = f("#aside1");
+// get sibling to the right
+var prev = query.prev(); // i.e. #aside0
+// **Note: if no element exists null is substituted
+```
 
-// 1) uses the element with id "tape" as a source point.
-//    using :all gets ALL the elements descendants rather than the
-//    the element itself
-// 2) get the children of the collection
-// 3) use the tag() filter to return elements of tag-type "input" or "canvas"
-// 4) return the collection for use with pop()
-f("#red:all").children().tags("input", "canvas").pop();
+**Selector.range** &mdash; gets elements at specified indice range.
+```js
+// get all elements contained in aside element
+var query = f("#aside:all");
+
+// range format => [start_index, end_index, step]
+// **Note: an end_index of -1 signals to use length of array
+
+// even   range => [0, -1, 2]
+// odd    range => [1, -1, 2]
+// entire range => [0, -1, 1]
+// < 3    range => [0, 3, 1]
+// > 4    range => [4, -1, 1]
+
+// example 1
+var filtered = query.range([0, 5, 1]); // gets first 5 elements
+```
+
+**Selector.siblings** &mdash; gets siblings of elements.
+```js
+// get aside element
+var query = f("#aside");
+// get siblings
+var next = query.siblings();
+```
+
+**Selector.skip** &mdash; filters out element at provided indices..
+```js
+// get all elements contained in aside element
+var query = f("#aside:all");
+// filter out the first and last elements
+var filtered = query.skip([0, -1]);
+```
+
+**Selector.state** &mdash; gets elements with supplied state.
+
+Possible states include <code>checked</code>, <code>selected</code>, <code>disabled</code>, <code>visible</code>, and <code>empty</code> (no elements or text nodes).
+```js
+// get all input elements of type checkbox contained in aside element
+var query = f("#aside:all").tags("input").attrs("[type=checkbox]");
+
+// example 1: gets checked elements
+var checked = query.state("checked", true);
+
+// example 2: gets nonchecked elements
+var nonchecked = query.state("checked", false);
+```
+
+**Selector.tags** &mdash; gets elements matching any of the supplied tag types.
+```js
+// get all elements contained in aside element
+var query = f("#aside:all");
+
+// example 1: gets elements of type input or canvas
+var filtered = query.tags("input", "canvas");
+
+// example 2: gets everything BUT input or canvas elements
+var filtered = query.tags("!input", "!canvas");
+```
+
+**Selector.text_nodes** &mdash; gets the text nodes of elements in last stack.
+```js
+// get all elements contained in aside element
+var query = f("#aside:all");
+// filter all aside elements to get text nodes
+var text_nodes = query.text_nodes();
 ```
