@@ -20,6 +20,8 @@
          * @param  {Integer} value [The value to check.]
          * @return {Boolean}       [description]
          * @source [https://www.joezimjs.com/javascript/great-mystery-of-the-tilde/]
+         * @source [http://stackoverflow.com/questions/12299665/what-does-a-tilde-do-
+         * when-it-precedes-an-expression/12299717#12299717]
          */
         function in_array(array, value) {
             return -~index(array, value);
@@ -530,7 +532,7 @@
                  * @description [Screens collection of elements against provided attrs.]
                  * @return {Object}  [Return self to allow method chaining.]
                  */
-                attrs: function() {
+                "attrs": function() {
 
                     // define vars
                     var elements = [],
@@ -631,7 +633,11 @@
                          * @param {Array} attrs    [Array of screened elements.]
                          */
                         set = function(elements, attrs) {
-                            loop1: for (var screened = [], current_element, i = 0, l = elements.length; i < l; i++) {
+
+                            // define vars
+                            var screened = [];
+
+                            loop1: for (var current_element, i = 0, l = elements.length; i < l; i++) {
                                 current_element = elements[i];
                                 for (var current_attr, j = 0, ll = attrs.length; j < ll; j++) {
                                     current_attr = attrs[j]; // i.e. -> ["type", "=", "file"] or [true, " " , type] or [false, "!", "value"]
@@ -688,7 +694,7 @@
                  * @description [Shorthand for attribute methods, e.g. Selector.form(":text").]
                  * @return {Object}  [Return self to allow method chaining.]
                  */
-                form: function() {
+                "form": function() {
 
                     // define vars
                     var this_ = this;
@@ -714,7 +720,7 @@
                  * @param  {Bool} state    [Provided boolean to check property against.]
                  * @return {Object}  [Return self to allow method chaining.]
                  */
-                state: function(property, state) {
+                "state": function(property, state) {
 
                     // define vars
                     var elements = [],
@@ -832,13 +838,15 @@
                     // elements array we need to reset the stop from -1 to the length of the elements array.
                     // [1] The user wants to cycle through all the elements.
                     // [2] Range exceeds length of the elements array.
+                    // (tilde-explanation)[http://stackoverflow.com/questions/12299665/what-does-a-tilde-do-when-it-
+                    // precedes-an-expression/12299717#12299717]
                     if ( /*[1]*/ !~range[1] || /*[2]*/ stop > l) stop = l;
 
                     // if provided start is larger than the elements array we reset it to 0.
                     if (start > l) start = 0;
 
                     // Loop through using the provided start, stop, and step values.
-                    for (var elements = [], i = start; i < stop;) {
+                    for (var i = start; i < stop;) {
                         elements.push(array[i]);
                         i = i + step;
                     }
@@ -849,8 +857,16 @@
                     return this_;
 
                 },
+                /**
+                 * @description [Returns last element collection stack.]
+                 * @return {Array} [Last element collection.]
+                 */
+                "pop": function() {
+                    var this_ = this;
+                    return this_.stack[this_.stack.length - 1];
+                },
                 /** @description [Empty method; added to mask object as an array.] */
-                // splice: function() { /* noop */ },
+                "splice": function() { /* noop */ },
             },
 
             // class to extend
