@@ -527,6 +527,52 @@
 
                 },
                 /**
+                 * @description [Screens stack based on their property state, disabled,
+                 *               selected, and checked.]
+                 * @param  {String} property [The property to check against.]
+                 * @param  {Bool} state    [Provided boolean to check property against.]
+                 * @return {Object}  [Return self to allow method chaining.]
+                 */
+                state: function(property, state) {
+
+                    // define vars
+                    var elements = [],
+                        this_ = this,
+                        array = this_.stack[this_.stack.length - 1];
+
+                    // the states contains the 3 possible methods in whick to
+                    // filter by; empty, visible, and default property check (checked,
+                    // selected, etc.).
+                    var states = {
+                        // this takes into account both child elements and text nodes
+                        "empty": function(element, bool) {
+                            return !element.childNodes.length === bool;
+                        },
+                        "visible": function(element, bool) {
+                            return (((element.offsetHeight >= 1) ? 1 : 0) == bool);
+                        }
+                    };
+
+                    // If the property provided is not empty or visible we set filter function
+                    // to the other property provided. e.g. "checked".
+                    // [http://stackoverflow.com/questions/7851868/whats-the-proper-value-for-a-checked-attribute-of-an-html-checkbox]
+                    var filter = states[property] || function(element, bool, property) {
+                        return element[property] == bool;
+                    };
+
+                    // loop through elements and screen to see if they have the property set to the provided state of either true or false.
+                    for (var current_element, i = 0, l = array.length; i < l; i++) {
+                        current_element = array[i];
+                        if (filter(current_element, state, property)) elements.push(current_element);
+                    }
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
+                /**
                  * @description [Positional filter which skips elements at provided indices.]
                  * @param  {Array}  indices_to_skip [Indices to be skipped.]
                  * @return {Object}  [Return self to allow method chaining.]
