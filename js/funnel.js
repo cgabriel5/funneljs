@@ -685,6 +685,29 @@
 
                 },
                 /**
+                 * @description [Shorthand for attribute methods, e.g. Selector.form(":text").]
+                 * @return {Object}  [Return self to allow method chaining.]
+                 */
+                form: function() {
+
+                    // define vars
+                    var this_ = this;
+
+                    // clean the provided arguments and pass it to the attr() function.
+                    // modify the arguments object...
+                    for (var args = arguments, i = 0, l = args.length; i < l; i++) {
+                        args[i] = "[type=" + args[i].replace(/^\:/, "") + "]";
+                    }
+
+                    // invoke the attr() method.
+                    this_.attrs.apply(this_, args);
+
+                    // no need to update just return self as the updating is done above when
+                    // attrs() method is invoked.
+                    return this_;
+
+                },
+                /**
                  * @description [Screens stack based on their property state, disabled,
                  *               selected, and checked.]
                  * @param  {String} property [The property to check against.]
