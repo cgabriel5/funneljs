@@ -185,10 +185,6 @@
                 // returning a new instance of the selector with the new keyword.
                 if (!(this instanceof Selector)) return new Selector(source_points);
 
-                // properties
-                this.stack = [];
-                this.length = 0;
-
                 // get elements from source points
                 var points = source_points.replace(/\s+/g, "").split(/,/g),
                     elements = [],
@@ -207,8 +203,8 @@
                     else elements = elements.concat(to_array(this[parts[1]]([cid]))); // i.e. -> this.all()
                 }
 
-                // add elements to selector object
-                this.stack.push(elements);
+                // add object properties
+                this.stack = [elements]; // add elements to selector object
                 this.length = elements.length;
 
             },
