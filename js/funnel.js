@@ -527,6 +527,164 @@
 
                 },
                 /**
+                 * @description [Screens collection of elements against provided attrs.]
+                 * @return {Object}  [Return self to allow method chaining.]
+                 */
+                attrs: function() {
+
+                    // define vars
+                    var elements = [],
+                        this_ = this;
+
+                    // attribute filters
+                    var filters = {
+                            /**
+                             * @description [Checks that the element does not have the provided attribute.]
+                             * @param  {String} pav     [Provided attr value to check against.]
+                             * @param  {String} value   [Currently set attribute value.]
+                             * @param  {Object} element [The element to check against.]
+                             * @return {Bool}
+                             */
+                            "!": function(pav, value, element) {
+                                return !(element.hasAttribute(pav));
+                            },
+                            /**
+                             * @description [Checks if the element has the provided attribute.]
+                             * @param  {String} pav     [Provided attr value to check against.]
+                             * @param  {String} value   [Currently set attribute value.]
+                             * @param  {Object} element [The element to check against.]
+                             * @return {Bool}
+                             */
+                            " ": function(pav, value, element) {
+                                return element.hasAttribute(pav);
+                            },
+                            /**
+                             * @description [Checks if pav and the current set value match.]
+                             * @param  {String} pav     [Provided attr value to check against.]
+                             * @param  {String} value   [Currently set attribute value.]
+                             * @param  {Object} element [The element to check against.]
+                             * @return {Bool}
+                             */
+                            "=": function(pav, value) {
+                                return pav === value;
+                            },
+                            /**
+                             * @description [Checks to see if the pav and current set value do not match.]
+                             * @param  {String} pav     [Provided attr value to check against.]
+                             * @param  {String} value   [Currently set attribute value.]
+                             * @return {Bool}
+                             */
+                            "!=": function(pav, value) {
+                                return pav !== value;
+                            },
+                            /**
+                             * @description [Checks whether the attr value ends with the provided string.]
+                             * @param  {String} pav     [Provided attr value to check against.]
+                             * @param  {String} value   [Currently set attribute value.]
+                             * @return {Bool}
+                             */
+                            "$=": function(pav, value) {
+                                return value.length - value.lastIndexOf(pav) === pav.length;
+                            },
+                            /**
+                             * @description [Checks whether the attr value equals the provided value or starts with the provided string and a hyphen.]
+                             * @param  {String} pav     [Provided attr value to check against.]
+                             * @param  {String} value   [Currently set attribute value.]
+                             * @return {Bool}
+                             */
+                            "|=": function(pav, value) {
+                                /* ! is used to check if the value is at the zero index */
+                                return !in_array(value, pav) || !in_array(value, pav + "-");
+                            },
+                            /**
+                             * @description [Checks to see if the attr value starts with the provided string.]
+                             * @param  {String} pav     [Provided attr value to check against.]
+                             * @param  {String} value   [Currently set attribute value.]
+                             * @return {Bool}
+                             */
+                            "^=": function(pav, value) {
+                                /* ! is used to check if the value is at the zero index */
+                                return !index(value, pav);
+                            },
+                            /**
+                             * @description [Checks to see if the attr value contains the specific value provided; allowing for edge white spaces.]
+                             * @param  {String} pav     [Provided attr value to check against.]
+                             * @param  {String} value   [Currently set attribute value.]
+                             * @return {Bool}
+                             */
+                            "~=": function(pav, value) {
+                                return value.trim() === pav;
+                            },
+                            /**
+                             * @description [Checks if the attr contains the value provided.]
+                             * @param  {String} pav     [Provided attr value to check against.]
+                             * @param  {String} value   [Currently set attribute value.]
+                             * @return {Bool}
+                             */
+                            "*=": function(pav, value) {
+                                return in_array(value, pav);
+                            }
+                        },
+                        /**
+                         * @description [Filters element stack based on the attrs provided.]
+                         * @param {Array} elements [The array of attributes provided.]
+                         * @param {Array} attrs    [Array of screened elements.]
+                         */
+                        set = function(elements, attrs) {
+                            loop1: for (var screened = [], current_element, i = 0, l = elements.length; i < l; i++) {
+                                current_element = elements[i];
+                                for (var current_attr, j = 0, ll = attrs.length; j < ll; j++) {
+                                    current_attr = attrs[j]; // i.e. -> ["type", "=", "file"] or [true, " " , type] or [false, "!", "value"]
+                                    if (!filters[current_attr[1]](current_attr[2], current_element.getAttribute(current_attr[0]), current_element)) continue loop1;
+                                    if (j === ll - 1) screened.push(current_element);
+                                }
+                            }
+                            return screened;
+                        },
+                        /**
+                         * @description [Parses paorived attrs.]
+                         * @param  {Array} attrs [The array of attributes provided, both has and nothas.]
+                         * @return {Array}       [An array containing the cleaned attributes.]
+                         */
+                        input = function(attrs) {
+
+                            // define vars
+                            var types = Object.keys(filters),
+                                ll = types.length,
+                                screened = [];
+
+                            loop1: for (var current_attr, i = 0, l = attrs.length; i < l; i++) {
+                                current_attr = attrs[i].replace(/^\[|\]$/g, ""); // [type=file] -> type=file
+                                for (var j = ll - 1; j > -1; j--) {
+                                    var type = types[j];
+                                    var check = in_array(current_attr, type);
+                                    if (check) { // type found
+                                        var parts = current_attr.split(type);
+                                        screened.push([parts[0], type, parts[1]]);
+                                        continue loop1; // continue w/ next attribute check
+                                    } else if (!check && j === 1) { // when no value is supplied
+                                        // case [!type] -> checks that element does not have type attribute
+                                        if (current_attr.charCodeAt(0) === 33) screened.push([false, "!", current_attr.substring(1)]);
+                                        // else just checking if attribute is present -> [type]
+                                        else screened.push([true, " ", current_attr]);
+                                        continue loop1; // continue w/ next attribute check
+                                    }
+                                }
+                            }
+
+                            return screened;
+
+                        };
+
+                    elements = set(this_.stack[this_.stack.length - 1], input(arguments));
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
+                /**
                  * @description [Screens stack based on their property state, disabled,
                  *               selected, and checked.]
                  * @param  {String} property [The property to check against.]
