@@ -527,6 +527,32 @@
 
                 },
                 /**
+                 * @description [Positional filter which only gets elements at provided indices.]
+                 * @param  {Array}  wanted_indices [Indices where elements are wanted.]
+                 * @return {Object}  [Return self to allow method chaining.]
+                 */
+                "only": function(wanted_indices) {
+
+                    // define vars
+                    var elements = [],
+                        this_ = this,
+                        array = this_.stack[this_.stack.length - 1];
+
+                    // loop through and only add elements that match indices found in the provided
+                    // wanted_indices array. **Note: if the current wanted index is negative we simply
+                    // count backwards. e.g. array[l + current_windex].
+                    for (var current_windex, l = array.length, i = 0, ll = wanted_indices.length; i < ll; i++) {
+                        current_windex = wanted_indices[i];
+                        if (current_windex < l) elements.push((current_windex < 0) ? array[l + current_windex] : array[current_windex]);
+                    }
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
+                /**
                  * @description [Positional filter which screens elements based on a provided range.]
                  * @param  {Array}  range [The provided range to work with in the form [start, stop, step].]
                  * @return {Object}  [Return self to allow method chaining.]
