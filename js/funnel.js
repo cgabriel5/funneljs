@@ -527,6 +527,33 @@
 
                 },
                 /**
+                 * @description [Positional filter which skips elements at provided indices.]
+                 * @param  {Array}  indices_to_skip [Indices to be skipped.]
+                 * @return {Object}  [Return self to allow method chaining.]
+                 */
+                "skip": function(indices_to_skip) {
+
+                    // define vars
+                    var elements = [],
+                        this_ = this,
+                        array = this_.stack[this_.stack.length - 1],
+                        // if -1 is a provided index we shorten the length by 1. This means
+                        // the user wants to skip the last item.
+                        l = (in_array(indices_to_skip, -1)) ? (array.length - 1) : array.length;
+
+                    // loop through and only adding to the screened array indices not found in the
+                    // indices_to_skip array.
+                    for (var i = 0; i < l; i++) {
+                        if (!in_array(indices_to_skip, i)) elements.push(array[i]);
+                    }
+
+                    // add elements to selector object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
+                /**
                  * @description [Positional filter which only gets elements at provided indices.]
                  * @param  {Array}  wanted_indices [Indices where elements are wanted.]
                  * @return {Object}  [Return self to allow method chaining.]
