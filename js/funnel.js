@@ -15,16 +15,16 @@
             return array.indexOf(value);
         }
         /**
-         * @description [Checks if the given value is in provided array.]
-         * @param  {Array}   array [The array to check against.]
-         * @param  {Integer} value [The value to check.]
-         * @return {Boolean}       [description]
+         * @description [Checks if the given value is in provided array or string.]
+         * @param  {Array|String}   iterable [The array or string to check against.]
+         * @param  {Any}            value    [The value to check.]
+         * @return {Boolean}                 [description]
          * @source [https://www.joezimjs.com/javascript/great-mystery-of-the-tilde/]
          * @source [http://stackoverflow.com/questions/12299665/what-does-a-tilde-do-
          * when-it-precedes-an-expression/12299717#12299717]
          */
-        function in_array(array, value) {
-            return -~index(array, value);
+        function includes(iterable, value) {
+            return -~index(iterable, value);
         }
         /**
          * @description [Makes an Array from an array like object (ALO). ALO must have a length property
@@ -64,7 +64,7 @@
             // returning true if a commonality is found. otherwise return false
             l = short_array.length;
             for (; i < l; i++)
-                if (in_array(long_array, short_array[i])) return true;
+                if (includes(long_array, short_array[i])) return true;
             return false;
         }
         /**
@@ -118,7 +118,7 @@
                      * @return {Boolean|Undefined}
                      */
                     tags: function(element, has_not, reverse) {
-                        var check = in_array(has_not, element.tagName.toLowerCase());
+                        var check = includes(has_not, element.tagName.toLowerCase());
                         // reverse for the not checks
                         if (reverse) check = !check;
                         if (check) return true;
@@ -136,7 +136,7 @@
                             var text_content = element.textContent.trim();
                             // text content must not be empty
                             if (text_content === "") continue;
-                            var check = in_array(text_content, current_text);
+                            var check = includes(text_content, current_text);
                             // reverse for the not checks
                             if (reverse) check = !check;
                             if (!check) return; // fails to have a class we return
@@ -153,7 +153,7 @@
                     classes: function(element, has_not, reverse) {
                         for (var current_class, i = 0, l = has_not.length; i < l; i++) {
                             current_class = has_not[i];
-                            var check = in_array((" " + element.className + " "), (" " + current_class + " "));
+                            var check = includes((" " + element.className + " "), (" " + current_class + " "));
                             // reverse for the not checks
                             if (reverse) check = !check;
                             if (!check) return; // fails to have a class we return
@@ -592,7 +592,7 @@
                              */
                             "|=": function(pav, value) {
                                 /* ! is used to check if the value is at the zero index */
-                                return !in_array(value, pav) || !in_array(value, pav + "-");
+                                return !includes(value, pav) || !includes(value, pav + "-");
                             },
                             /**
                              * @description [Checks to see if the attr value starts with the provided string.]
@@ -620,7 +620,7 @@
                              * @return {Bool}
                              */
                             "*=": function(pav, value) {
-                                return in_array(value, pav);
+                                return includes(value, pav);
                             }
                         },
                         /**
@@ -659,7 +659,7 @@
                                 current_attr = attrs[i].replace(/^\[|\]$/g, ""); // [type=file] -> type=file
                                 for (var j = ll - 1; j > -1; j--) {
                                     var type = types[j];
-                                    var check = in_array(current_attr, type);
+                                    var check = includes(current_attr, type);
                                     if (check) { // type found
                                         var parts = current_attr.split(type);
                                         screened.push([parts[0], type, parts[1]]);
@@ -768,12 +768,12 @@
                         array = this_.stack[this_.stack.length - 1],
                         // if -1 is a provided index we shorten the length by 1. This means
                         // the user wants to skip the last item.
-                        l = (in_array(indices_to_skip, -1)) ? (array.length - 1) : array.length;
+                        l = (includes(indices_to_skip, -1)) ? (array.length - 1) : array.length;
 
                     // loop through and only adding to the screened array indices not found in the
                     // indices_to_skip array.
                     for (var i = 0; i < l; i++) {
-                        if (!in_array(indices_to_skip, i)) elements.push(array[i]);
+                        if (!includes(indices_to_skip, i)) elements.push(array[i]);
                     }
 
                     // add elements to selector object
