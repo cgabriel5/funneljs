@@ -1,6 +1,27 @@
 # funneljs
 Simple, standalone, lightweight JavaScript selector engine.
 
+### How It Works
+funneljs works by using a broad collection of elements which are then subjected
+to filters to get/exclude elements.
+```js
+// 1. Get elements from source points
+funneljs("source_point1", "source_pointN")
+// 2. chain filters to get/exclude elements
+.filter1().filter2().filterN()
+// 3. finally, return elements for use with pop()
+.pop();
+
+// example
+funneljs("#aside:all").tags("span", "div").pop();
+```
+### What's a source point?
+A source point is just an element. This element is used to grab all its descendants
+to build the collection of elements we want to filter. Querying the DOM is an
+expensive task as it searches the entire DOM for your wanted elements. Rather than
+search the entire DOM, this method focuses its search on the descendants of the source
+point elements.
+
 ### Add to project
 ```html
 <script src="my_js_directory_path/funnel.js"></script>
