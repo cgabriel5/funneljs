@@ -118,7 +118,7 @@ var next = query.next(); // i.e. #aside2
 // **Note: if no element exists null is substituted
 ```
 
-**Selector.only** &mdash; filters out any element not in provided indices..
+**Selector.only** &mdash; filters out any element not in provided indices.
 ```js
 // get all elements contained in aside element
 var query = f("#aside:all");
@@ -182,7 +182,7 @@ var query = f("#aside");
 var next = query.siblings();
 ```
 
-**Selector.skip** &mdash; filters out element at provided indices..
+**Selector.skip** &mdash; filters out element at provided indices.
 ```js
 // get all elements contained in aside element
 var query = f("#aside:all");
