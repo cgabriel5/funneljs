@@ -28,6 +28,18 @@ expensive task as it searches the entire DOM for your wanted elements. Rather th
 search the entire DOM, this method focuses its search on the descendants of the source
 point elements.
 
+### Source Point Examples
+Things to note:
+
+1. Source point must be an element ID
+2. N number of source points is possible.
+```js
+funneljs("#aside"); // === document.getElementId("aside")
+funneljs("#aside:all") === funneljs("#aside").all() // === document.getElementId("aside").getElementsByTagName("*");
+funneljs("#aside", "#footer:all"); // === document.getElementId("aside") + document.getElementId("footer").getElementsByTagName("*");
+funneljs("#aside:all", "#footer:all"); // === document.getElementId("aside").getElementsByTagName("*") + document.getElementId("footer").getElementsByTagName("*");
+```
+
 ### Add to project
 ```html
 <script src="my_js_directory_path/funnel.js"></script>
