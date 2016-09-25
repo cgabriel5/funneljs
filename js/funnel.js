@@ -213,20 +213,31 @@
         var Selector = class__({
 
             // class constructor
-            "constructor__": function(source_points) {
+            "constructor__": function() {
+
+                // cache arguments object
+                var args = arguments;
 
                 // not source points give warning and return
-                if (!source_points) return console.warn("No source point(s) provided.");
+                if (!args) return console.warn("No source point(s) provided.");
 
-                // if user does not inoke query with new keyword we use it for them by
+                // if user does not invoke query with new keyword we use it for them by
                 // returning a new instance of the selector with the new keyword.
-                if (!(this instanceof Selector)) return new Selector(source_points);
+                if (!(this instanceof Selector)) return new Selector(true, args);
+
+                // check if new keywords applied recursively:
+                // when the new keywords is not used the arguments get passed into a new Selector object.
+                // this, the next time around, puts the arguments inside an array and therefore the following
+                // time the arguments are accesses they are messed up. This check looks to find whether the
+                // new keyword was recursively used. If so, the true arguments are reset to args[1].
+                var is_recursive = (args[0] === true && Object.prototype.toString.call(args[1]) === "[object Arguments]");
 
                 // get elements from source points
-                var points = source_points.replace(/\s+/g, "").split(/,/g),
+                var points = to_array(is_recursive ? args[1] : args),
                     elements = [],
                     point, parts, cid;
 
+                // loop over all source points, get descendants is :all is supplied
                 for (var i = 0, l = points.length; i < l; i++) {
                     // cache the current source point, i.e. -> #red:all
                     point = points[i].trim();
