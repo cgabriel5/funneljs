@@ -14,6 +14,12 @@ funneljs("source_point1", "source_pointN")
 
 // example
 funneljs("#aside:all").tags("span", "div").pop();
+// explanation...
+// 1) query uses element with the ID of "aside" as its source point
+//    the ":all" attached to source point means to grab ALL its descendants
+// 2) the tags() filter is then used on the elements collection to only get
+//    elements of tags "span" or "div"
+// 3) finally, the filtered collection is returned for use with pop()
 ```
 ### What's a source point?
 A source point is just an element. This element is used to grab all its descendants
