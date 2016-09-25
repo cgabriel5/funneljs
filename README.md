@@ -50,7 +50,7 @@ var query = f("#aside:all");
 // example 1: gets elements that HAVE a class attribute
 var filtered = query.attrs("[class]");
 
-// example 2: gets elements that DO NOT have a class sttribute
+// example 2: gets elements that DO NOT have a class attribute
 var filtered = query.attrs("[!class]");
 // **Note: not(!) only checks for absence of attribute
 
