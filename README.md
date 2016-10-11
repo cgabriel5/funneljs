@@ -1,9 +1,12 @@
 # funneljs
+
 Simple, standalone, lightweight JavaScript selector engine.
 
 ### How It Works
+
 funneljs works by using a broad collection of elements which are then subjected
 to filters to get/exclude elements.
+
 ```js
 // 1. Get elements from source points
 funneljs("source_point1", "source_pointN")
@@ -21,7 +24,9 @@ funneljs("#aside:all").tags("span", "div").pop();
 //    elements of tags "span" or "div"
 // 3) finally, the filtered collection is returned for use with pop()
 ```
+
 ### What's a source point?
+
 A source point is just an element. This element is used to grab all its descendants
 to build the collection of elements we want to filter. Querying the DOM is an
 expensive task as it searches the entire DOM for your wanted elements. Rather than
@@ -29,10 +34,12 @@ search the entire DOM, this method focuses its search on the descendants of the 
 point elements.
 
 ### Source Point Examples
+
 Things to note:
 
 1. Source point must be an element ID
 2. N number of source points is possible.
+
 ```js
 funneljs("#aside"); // === document.getElementId("aside")
 funneljs("#aside:all") === funneljs("#aside").all() // === document.getElementId("aside").getElementsByTagName("*");
@@ -41,24 +48,32 @@ funneljs("#aside:all", "#footer:all"); // === document.getElementId("aside").get
 ```
 
 ### Add to project
+
 ```html
 <script src="my_js_directory_path/funnel.js"></script>
 ```
+
 ### Access selector
+
 ```js
 var f = funneljs;
 // or
 var f = window.funneljs;
 ```
+
 ### Selector Methods
+
 **Selector.all** &mdash; gets children + descendants of elements in last stack.
+
 ```js
 // can be combined with source element
 var query = f("#aside:all");
 // or used as a chained method
 var query = f("#aside").all();
 ```
+
 **Selector.attrs** &mdash; gets elements matching all supplied attributes.
+
 ```js
 // get all elements contained in aside element
 var query = f("#aside:all");
@@ -74,10 +89,10 @@ var filtered = query.attrs("[!class]");
 
 // example 3: gets elements with a type attribute AND value equal to text
 var filtered = query.attrs("[type=text]");
-
 ```
 
 **Selector.children** &mdash; gets element's children.
+
 ```js
 // get aside element
 var query = f("#aside");
@@ -86,6 +101,7 @@ var next = query.children();
 ```
 
 **Selector.classes** &mdash; gets elements matching any of the supplied classes.
+
 ```js
 // get all elements contained in aside element
 var query = f("#aside:all");
@@ -99,6 +115,7 @@ var filtered = query.classes("!active", "!nav-item");
 
 **Selector.form** &mdash; Selector.attr shorthand.
 (List of possible input types [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input) and [here](http://www.w3schools.com/TAGS/att_input_type.asp))
+
 ```js
 // get all elements contained in aside element
 var query = f("#aside:all");
@@ -110,6 +127,7 @@ var filtered = query.attrs("[type=text]");
 ```
 
 **Selector.next** &mdash; gets the next element sibling of elements in last stack.
+
 ```js
 // get aside element
 var query = f("#aside1");
@@ -119,6 +137,7 @@ var next = query.next(); // i.e. #aside2
 ```
 
 **Selector.only** &mdash; filters out any element not in provided indices.
+
 ```js
 // get all elements contained in aside element
 var query = f("#aside:all");
@@ -127,6 +146,7 @@ var filtered = query.only([0, 1, 2]);
 ```
 
 **Selector.parent** &mdash; gets element's parent.
+
 ```js
 // get aside element
 var query = f("#aside");
@@ -135,6 +155,7 @@ var next = query.parent();
 ```
 
 **Selector.parents** &mdash; gets element's parents.
+
 ```js
 // get aside element
 var query = f("#aside");
@@ -143,11 +164,13 @@ var next = query.parents();
 ```
 
 **Selector.pop** &mdash; returns elements for use.
+
 ```js
 query.pop(); // returns elements are contained in an array
 ```
 
 **Selector.prev** &mdash; gets the previous element sibling of elements in last stack.
+
 ```js
 // get aside element
 var query = f("#aside1");
@@ -157,6 +180,7 @@ var prev = query.prev(); // i.e. #aside0
 ```
 
 **Selector.range** &mdash; gets elements at specified indice range.
+
 ```js
 // get all elements contained in aside element
 var query = f("#aside:all");
@@ -175,6 +199,7 @@ var filtered = query.range([0, 5, 1]); // gets first 5 elements
 ```
 
 **Selector.siblings** &mdash; gets siblings of elements.
+
 ```js
 // get aside element
 var query = f("#aside");
@@ -183,6 +208,7 @@ var next = query.siblings();
 ```
 
 **Selector.skip** &mdash; filters out element at provided indices.
+
 ```js
 // get all elements contained in aside element
 var query = f("#aside:all");
@@ -193,6 +219,7 @@ var filtered = query.skip([0, -1]);
 **Selector.state** &mdash; gets elements with supplied state.
 
 Possible states include <code>checked</code>, <code>selected</code>, <code>disabled</code>, <code>visible</code>, and <code>empty</code> (no elements or text nodes).
+
 ```js
 // get all input elements of type checkbox contained in aside element
 var query = f("#aside:all").tags("input").attrs("[type=checkbox]");
@@ -205,6 +232,7 @@ var nonchecked = query.state("checked", false);
 ```
 
 **Selector.tags** &mdash; gets elements matching any of the supplied tag types.
+
 ```js
 // get all elements contained in aside element
 var query = f("#aside:all");
@@ -217,12 +245,17 @@ var filtered = query.tags("!input", "!canvas");
 ```
 
 **Selector.text_nodes** &mdash; gets the text nodes of elements in last stack.
+
 ```js
 // get all elements contained in aside element
 var query = f("#aside:all");
 // filter all aside elements to get text nodes
 var text_nodes = query.text_nodes();
 ```
+
+### TODO
+
+- [ ] Improve performance and cut down repetitive code
 
 ### License
 
