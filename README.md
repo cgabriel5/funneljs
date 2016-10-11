@@ -223,3 +223,7 @@ var query = f("#aside:all");
 // filter all aside elements to get text nodes
 var text_nodes = query.text_nodes();
 ```
+
+### License
+
+This project uses the [MIT License](https://github.com/cgabriel5/funneljs/blob/master/LICENSE.txt).
