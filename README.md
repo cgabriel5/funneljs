@@ -41,10 +41,42 @@ Things to note:
 2. N number of source points is possible.
 
 ```js
-funneljs("#aside"); // === document.getElementId("aside")
-funneljs("#aside:all") === funneljs("#aside").all() // === document.getElementId("aside").getElementsByTagName("*");
-funneljs("#aside", "#footer:all"); // === document.getElementId("aside") + document.getElementId("footer").getElementsByTagName("*");
-funneljs("#aside:all", "#footer:all"); // === document.getElementId("aside").getElementsByTagName("*") + document.getElementId("footer").getElementsByTagName("*");
+// source point
+funneljs("#aside");
+
+// equivalent Vanilla JavaScript
+document.getElementById("aside");
+```
+
+```js
+// source point
+funneljs("#aside:all");
+
+// same as source point
+funneljs("#aside").all();
+
+// equivalent Vanilla JavaScript
+document.getElementById("aside").getElementsByTagName("*");
+```
+
+```js
+// source point
+funneljs("#aside", "#footer:all");
+
+// equivalent Vanilla JavaScript
+document.getElementById("aside");
++
+document.getElementById("footer").getElementsByTagName("*");
+```
+
+```js
+// source point
+funneljs("#aside:all", "#footer:all");
+
+// equivalent Vanilla JavaScript
+document.getElementById("aside").getElementsByTagName("*");
++
+document.getElementById("footer").getElementsByTagName("*");
 ```
 
 ### Add to project
