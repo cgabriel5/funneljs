@@ -7,25 +7,40 @@ Simple, standalone, lightweight JavaScript selector engine.
 funneljs works by using a broad collection of elements which are then subjected
 to filters to get/exclude elements.
 
-```js
-// 1. Get elements from source points
-funneljs("source_point1", "source_pointN")
-// 2. chain filters to get/exclude elements
-.filter1().filter2().filterN()
-// 3. finally, return elements for use with pop()
-.pop();
+* Get elements from source points:
 
-// example
-funneljs("#aside:all").tags("span", "div").pop();
-// explanation...
-// 1) query uses element with the ID of "aside" as its source point
-//    the ":all" attached to source point means to grab ALL its descendants
-// 2) the tags() filter is then used on the elements collection to only get
-//    elements of tags "span" or "div"
-// 3) finally, the filtered collection is returned for use with pop()
+```js
+funneljs("#source_point_id", "#source_point_id_N")
 ```
 
-### What's a source point?
+* Chain filters to get/exclude elements:
+
+```js
+.filter1().filter2().filterN()
+```
+
+* Finally, return elements for use with `pop()`:
+
+```js
+.pop();
+```
+
+**Example**
+
+```js
+funneljs("#aside:all").tags("span", "div").pop();
+```
+
+**Explanation**
+
+* Query uses element with the ID of `aside` as its source point. The `:all` attached to source point means to grab ALL its descendants.
+
+* The `tags()` filter is then used on the elements collection to only get
+  elements with the tags of `span` or `div`.
+
+* Finally, the filtered collection is returned for use as an `array` with `pop()`.
+
+### What's A Source Point?
 
 A source point is just an element. This element is used to grab all its descendants
 to build the collection of elements we want to filter. Querying the DOM is an
@@ -79,13 +94,13 @@ document.getElementById("aside").getElementsByTagName("*");
 document.getElementById("footer").getElementsByTagName("*");
 ```
 
-### Add to project
+### Add To Project
 
 ```html
 <script src="my_js_directory_path/funnel.js"></script>
 ```
 
-### Access selector
+### Access Selector
 
 ```js
 var f = funneljs;
