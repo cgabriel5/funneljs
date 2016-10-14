@@ -2,6 +2,18 @@
 
 Simple, standalone, lightweight JavaScript selector engine.
 
+##### Table of Contents
+
+[How It Works](#how-it-works)  
+[What's A Source Point](#what-is-a-source-point)  
+[Source Point Examples](#source-point-examples)  
+[Add To Project](#add-to-project)  
+[Access Selector](#access-selector)  
+[Selector Methods](#selector-methods)  
+[TODO](#todo)  
+[License](#license)  
+
+<a name="how-it-works"></a>
 ### How It Works
 
 funneljs works by using a broad collection of elements which are then subjected
@@ -40,6 +52,7 @@ funneljs("#aside:all").tags("span", "div").pop();
 
 * Finally, the filtered collection is returned for use as an `array` with `pop()`.
 
+<a name="what-is-a-source-point"></a>
 ### What's A Source Point?
 
 A source point is just an element. This element is used to grab all its descendants
@@ -48,6 +61,7 @@ expensive task as it searches the entire DOM for your wanted elements. Rather th
 search the entire DOM, this method focuses its search on the descendants of the source
 point elements.
 
+<a name="source-point-examples"></a>
 ### Source Point Examples
 
 Things to note:
@@ -94,12 +108,14 @@ document.getElementById("aside").getElementsByTagName("*");
 document.getElementById("footer").getElementsByTagName("*");
 ```
 
+<a name="add-to-project"></a>
 ### Add To Project
 
 ```html
 <script src="my_js_directory_path/funnel.js"></script>
 ```
 
+<a name="access-selector"></a>
 ### Access Selector
 
 ```js
@@ -108,6 +124,7 @@ var f = funneljs;
 var f = window.funneljs;
 ```
 
+<a name="selector-methods"></a>
 ### Selector Methods
 
 **Selector.all** &mdash; gets children + descendants of elements in last stack.
@@ -300,10 +317,12 @@ var query = f("#aside:all");
 var text_nodes = query.text_nodes();
 ```
 
+<a name="todo"></a>
 ### TODO
 
 - [ ] Improve performance and cut down repetitive code
 
+<a name="license"></a>
 ### License
 
 This project uses the [MIT License](https://github.com/cgabriel5/funneljs/blob/master/LICENSE.txt).
