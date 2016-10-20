@@ -10,6 +10,7 @@ Simple, standalone, lightweight JavaScript selector engine.
 [Add To Project](#add-to-project)  
 [Access Selector](#access-selector)  
 [Selector Methods](#selector-methods)  
+[Contributing](#contributing)  
 [TODO](#todo)  
 [License](#license)  
 
@@ -316,6 +317,13 @@ var query = f("#aside:all");
 // filter all aside elements to get text nodes
 var text_nodes = query.text_nodes();
 ```
+
+<a name="contributing"></a>
+### Contributing
+
+Contributions are welcome! Found a bug, feel like documentation is lacking/confusing and needs an update, have performance/feature suggestions or simply found a typo? Let me know! :)
+
+See how to contribute [here](https://github.com/cgabriel5/funneljs/blob/master/CONTRIBUTING.md).
 
 <a name="todo"></a>
 ### TODO
