@@ -237,20 +237,34 @@
                     elements = [],
                     point, parts, cid;
 
-                // loop over all source points, get descendants is :all is supplied
-                for (var i = 0, l = points.length; i < l; i++) {
-                    // cache the current source point, i.e. -> #red:all
-                    point = points[i].trim();
-                    parts = point.split(":"); // -> ["#red", "all"]
-                    cid = document.getElementById(parts[0].replace(/^\#/, ""));
-                    if (!cid) continue; // no element with ID found...skip iteration
-                    // part[1] is the filer. when no filter is applied we add the
-                    // source point directly to elements array
-                    if (!parts[1]) elements = elements.concat([cid]);
-                    // else apply the filter and add all returned (filtered) elements to array
-                    else elements = elements.concat(to_array(this[parts[1]]([cid]))); // i.e. -> this.all()
-                }
+                // the selector can also take in raw element nodes (elements)
+                // it can take n amount of DOM nodes. for example, using
+                // Google Chrome's console this is a valid use case:
+                // var a = funneljs($0, $1, $2 [, $n...]); Where the $<number>
+                // represents an element from the DOM
+                // what is $0? => {https://willd.me/posts/0-in-chrome-dev-tools}
+                if (Object.prototype.toString.call(points) === "[object Array]") {
 
+                    // reset the elements. the elements will now be the elements
+                    // that were provided.
+                    elements = points;
+
+                } else {
+
+                    // loop over all source points, get descendants is :all is supplied
+                    for (var i = 0, l = points.length; i < l; i++) {
+                        // cache the current source point, i.e. -> #red:all
+                        point = points[i].trim();
+                        parts = point.split(":"); // -> ["#red", "all"]
+                        cid = document.getElementById(parts[0].replace(/^\#/, ""));
+                        if (!cid) continue; // no element with ID found...skip iteration
+                        // part[1] is the filer. when no filter is applied we add the
+                        // source point directly to elements array
+                        if (!parts[1]) elements = elements.concat([cid]);
+                        // else apply the filter and add all returned (filtered) elements to array
+                        else elements = elements.concat(to_array(this[parts[1]]([cid]))); // i.e. -> this.all()
+                    }
+                }
                 // add object properties
                 this.stack = [elements]; // add elements to selector object
                 this.length = elements.length;
