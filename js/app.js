@@ -6,7 +6,7 @@ document.onreadystatechange = function() {
     if (document.readyState == "complete") {
 
         // get/cache selector
-        var f = window.app.funnel;
+        var f = window.funneljs;
 
         // use in the form of...
         // <source_point(s)>.<filter1>.<filter2>.<filtern>.<pop>;
@@ -32,14 +32,14 @@ document.onreadystatechange = function() {
         // 1) uses the elements with id "tape" and "file" as source points
         // 2) no filters are applied. therefore invoking pop() will only
         //    return the provided source elements
-        f('#tape #file').pop();
+        f("#tape", "#file").pop();
 
         // 1) uses the element with id "tape" as a source point.
         //    using :all gets ALL the elements descendants rather than the
         //    the element itself
         // 2) of the descendants filter out any that contain the class "active"
         // 3) return the collection for use with pop()
-        f('#red:all').classes('!active').pop();
+        f("#red:all").classes("!active").pop();
 
         // 1) uses the element with id "tape" as a source point.
         //    using :all gets ALL the elements descendants rather than the
