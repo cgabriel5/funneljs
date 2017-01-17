@@ -170,7 +170,7 @@
                      * @param  {Boolean}  reverse [If provided, reverses check. Used for not (!).]
                      * @return {Boolean|Undefined}
                      */
-                    tags: function(element, has_not, reverse) {
+                    "tags": function(element, has_not, reverse) {
                         var check = includes(has_not, element.tagName.toLowerCase());
                         // reverse for the not checks
                         if (reverse) check = !check;
@@ -183,7 +183,7 @@
                      * @param  {Boolean}  reverse [If provided, reverses check. Used for not (!).]
                      * @return {Boolean|Undefined}
                      */
-                    text: function(element, has_not, reverse) {
+                    "text": function(element, has_not, reverse) {
                         for (var current_text, i = 0, l = has_not.length; i < l; i++) {
                             current_text = has_not[i];
                             var text_content = element.textContent.trim();
@@ -203,7 +203,7 @@
                      * @param  {Boolean}  reverse [If provided, reverses check. Used for not (!).]
                      * @return {Boolean|Undefined}
                      */
-                    classes: function(element, has_not, reverse) {
+                    "classes": function(element, has_not, reverse) {
                         for (var current_class, i = 0, l = has_not.length; i < l; i++) {
                             current_class = has_not[i];
                             var check = includes((" " + element.className + " "), (" " + current_class + " "));
