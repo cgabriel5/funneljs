@@ -6,7 +6,7 @@ document.onreadystatechange = function() {
     if (document.readyState == "complete") {
 
         // get/cache selector
-        var f = window.funneljs;
+        var f = window.Funnel;
 
         // use in the form of...
         // <source_point(s)>.<filter1>.<filter2>.<filtern>.<pop>;

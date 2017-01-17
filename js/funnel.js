@@ -283,7 +283,7 @@
                         // **Note: the selector can also take in raw element nodes (elements)
                         // it can take N amount of DOM nodes. for example, using
                         // Google Chrome's console this is a valid use case:
-                        // var a = funneljs($0, $1); Where $<number> represents an element from
+                        // var a = Funnel($0, $1); Where $<number> represents an element from
                         // the DOM. what is $0? => {https://willd.me/posts/0-in-chrome-dev-tools}
 
                         // add the element point to the elements array
@@ -964,6 +964,6 @@
     })();
 
     // add to global scope for ease of use
-    window.funneljs = libraryjs;
+    window.Funnel = libraryjs;
 
 })();
