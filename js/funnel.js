@@ -2,7 +2,7 @@
 
     "use strict";
 
-    var funneljs = (function() {
+    var libraryjs = (function() {
 
         // =============================== Helper Functions
 
@@ -56,34 +56,6 @@
             return (!comparative) ? check : (check === comparative.toLowerCase());
         }
         /**
-         * @description [Checks if the supplied arrays have any items in common, or intersect.]
-         * @param  {Array}   array1 [The first array to perform comparison with.]
-         * @param  {Array}   array2 [The second array to perform comparison with.]
-         * @return {Boolean}        [description]
-         */
-        function intersect(array1, array2) {
-            // define vars
-            var short_array = array1,
-                long_array = array2,
-                i = 0,
-                l, a1_len = array1.length,
-                a2_len = array2.length;
-            // reset short and long arrays if arrays are equal in...
-            // ...length or if length of first array is less than that...
-            // ...of the second one.
-            if (a1_len === a2_len || a1_len < a2_len) {
-                short_array = array2;
-                long_array = array1;
-            }
-            // use length of short array as the last iteration stop.
-            // finally, check if arrays have anything in common.
-            // returning true if a commonality is found. otherwise return false
-            l = short_array.length;
-            for (; i < l; i++)
-                if (includes(long_array, short_array[i])) return true;
-            return false;
-        }
-        /**
          * @description [A class wrapper. Creates a class based on provided object containing class constructor__ and methods__.
          *               If class needs to extend another, provide it under the extend__ property.]
          * @param  {Object} cobject [The class object containing three properties: constructor__, methods__, and extend__.
@@ -124,8 +96,36 @@
         // =============================== Core Library Functions
 
         /**
+         * @description [Checks if the supplied arrays have any items in common, or intersect.]
+         * @param  {Array}   array1 [The first array to perform comparison with.]
+         * @param  {Array}   array2 [The second array to perform comparison with.]
+         * @return {Boolean}        [description]
+         */
+        function intersect(array1, array2) {
+            // define vars
+            var short_array = array1,
+                long_array = array2,
+                i = 0,
+                l, a1_len = array1.length,
+                a2_len = array2.length;
+            // reset short and long arrays if arrays are equal in...
+            // ...length or if length of first array is less than that...
+            // ...of the second one.
+            if (a1_len === a2_len || a1_len < a2_len) {
+                short_array = array2;
+                long_array = array1;
+            }
+            // use length of short array as the last iteration stop.
+            // finally, check if arrays have anything in common.
+            // returning true if a commonality is found. otherwise return false
+            l = short_array.length;
+            for (; i < l; i++)
+                if (includes(long_array, short_array[i])) return true;
+            return false;
+        }
+        /**
          * @description [Internal helper function. Is used when the "tags", "classes", or "text" filters are invoked.]
-         * @param  {Array}          this_ [The Selector object.]
+         * @param  {Array}          this_ [The Library object.]
          * @param  {String}         type  [The name of the filter being passed. (i.e. tags|classes|text)]
          * @param  {ArgumentsArray} args  [The passed in arguments object.]
          * @return {Array}                [Returns the filtered element collection stack.]
@@ -227,9 +227,9 @@
             return elements;
         };
 
-        // =============================== Selector Class
+        // =============================== Library Class
 
-        var Selector = class__({
+        var Library = class__({
 
             // class constructor
             "constructor__": function() {
@@ -240,12 +240,12 @@
                 // not source points give warning and return
                 if (!args) return console.warn("No source point(s) provided.");
 
-                // if user does not invoke query with new keyword we use it for them by
-                // returning a new instance of the selector with the new keyword.
-                if (!(this instanceof Selector)) return new Selector(true, args);
+                // if user does not invoke library with new keyword we use it for them by
+                // returning a new instance of the library with the new keyword.
+                if (!(this instanceof Library)) return new Library(true, args);
 
                 // check if new keywords applied recursively:
-                // when the new keywords is not used the arguments get passed into a new Selector object.
+                // when the new keywords is not used the arguments get passed into a new Library object.
                 // this, the next time around, puts the arguments inside an array and therefore the following
                 // time the arguments are accesses they are messed up. This check looks to find whether the
                 // new keyword was recursively used. If so, the true arguments are reset to args[1].
@@ -292,7 +292,7 @@
                     }
                 }
                 // add object properties
-                this.stack = [elements]; // add elements to selector object
+                this.stack = [elements]; // add elements to the object
                 this.length = elements.length;
 
             },
@@ -324,7 +324,7 @@
                     // only returns for constructor
                     if (source) return elements;
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -359,7 +359,7 @@
                     // only returns for constructor
                     if (source) return elements;
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -390,7 +390,7 @@
                     // only returns for constructor
                     if (source) return elements;
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -425,7 +425,7 @@
                     // only returns for constructor
                     if (source) return elements;
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -456,7 +456,7 @@
                     // only returns for constructor
                     if (source) return elements;
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -493,7 +493,7 @@
                     // only returns for constructor
                     if (source) return elements;
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -524,7 +524,7 @@
                     // only returns for constructor
                     if (source) return elements;
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -555,7 +555,7 @@
                     // only returns for constructor
                     if (source) return elements;
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -572,7 +572,7 @@
                     var elements = helper_one(this, "tags", arguments),
                         this_ = this;
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -589,7 +589,7 @@
                     var elements = helper_one(this, "classes", arguments),
                         this_ = this;
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -606,7 +606,7 @@
                     var elements = helper_one(this, "text", arguments),
                         this_ = this;
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -768,14 +768,14 @@
 
                     elements = set(this_.stack[this_.stack.length - 1], input(arguments));
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
 
                 },
                 /**
-                 * @description [Shorthand for attribute methods, e.g. Selector.form(":text").]
+                 * @description [Shorthand for attribute methods, e.g. Library.form(":text").]
                  * @return {Object}  [Return self to allow method chaining.]
                  */
                 "form": function() {
@@ -837,7 +837,7 @@
                         if (filter(current_element, state, property)) elements.push(current_element);
                     }
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -864,7 +864,7 @@
                         if (!includes(indices_to_skip, i)) elements.push(array[i]);
                     }
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -890,7 +890,7 @@
                         if (current_windex < l) elements.push((current_windex < 0) ? array[l + current_windex] : array[current_windex]);
                     }
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -935,7 +935,7 @@
                         i = i + step;
                     }
 
-                    // add elements to selector object
+                    // add elements to the object
                     this_.stack.push(elements);
                     this_.length = elements.length;
                     return this_;
@@ -958,12 +958,12 @@
 
         });
 
-        // return selector to add to global scope later...
-        return Selector;
+        // return library to add to global scope later...
+        return Library;
 
     })();
 
     // add to global scope for ease of use
-    window.funneljs = funneljs;
+    window.funneljs = libraryjs;
 
 })();
