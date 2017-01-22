@@ -5,8 +5,9 @@ document.onreadystatechange = function() {
     // all resources have loaded
     if (document.readyState == "complete") {
 
-        // get/cache selector
-        var f = window.Funnel;
+        // get the library
+        var libs = app.libs,
+            f = libs.Funnel;
 
         // use in the form of...
         // <source_point(s)>.<filter1>.<filter2>.<filtern>.<pop>;
