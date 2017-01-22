@@ -4,15 +4,21 @@ Simple, standalone, lightweight JavaScript selector engine.
 
 ##### Table of Contents
 
+[Access Selector](#access-selector)  
 [How It Works](#how-it-works)  
 [What's A Source Point](#what-is-a-source-point)  
 [Source Point Examples](#source-point-examples)  
 [Add To Project](#add-to-project)  
-[Access Selector](#access-selector)  
 [Selector Methods](#selector-methods)  
-[Contributing](#contributing)  
-[TODO](#todo)  
+[Contributing](#contributing)  <!-- [TODO](#todo)   -->  
 [License](#license)  
+
+<a name="access-selector"></a>
+### Access Selector
+
+```js
+var f = window.app.libs.Funnel;
+```
 
 <a name="how-it-works"></a>
 ### How It Works
@@ -23,7 +29,7 @@ to filters to get/exclude elements.
 * Get elements from source points:
 
 ```js
-funneljs("#source_point_id", "#source_point_id_N")
+f("#source_point_id", "#source_point_id_N")
 ```
 
 * Chain filters to get/exclude elements:
@@ -41,7 +47,7 @@ funneljs("#source_point_id", "#source_point_id_N")
 **Example**
 
 ```js
-funneljs("#aside:all").tags("span", "div").pop();
+f("#aside:all").tags("span", "div").pop();
 ```
 
 **Explanation**
@@ -65,14 +71,14 @@ point elements.
 <a name="source-point-examples"></a>
 ### Source Point Examples
 
-Things to note:
+**Things to note:**
 
-1. Source point must be an element ID
+1. Source point must be an element `ID` or a `DOMElement`
 2. N number of source points is possible.
 
 ```js
 // source point
-funneljs("#aside");
+f("#aside");
 
 // equivalent Vanilla JavaScript
 document.getElementById("aside");
@@ -80,10 +86,10 @@ document.getElementById("aside");
 
 ```js
 // source point
-funneljs("#aside:all");
+f("#aside:all");
 
 // same as source point
-funneljs("#aside").all();
+f("#aside").all();
 
 // equivalent Vanilla JavaScript
 document.getElementById("aside").getElementsByTagName("*");
@@ -91,7 +97,7 @@ document.getElementById("aside").getElementsByTagName("*");
 
 ```js
 // source point
-funneljs("#aside", "#footer:all");
+f("#aside", "#footer:all");
 
 // equivalent Vanilla JavaScript
 document.getElementById("aside");
@@ -101,7 +107,7 @@ document.getElementById("footer").getElementsByTagName("*");
 
 ```js
 // source point
-funneljs("#aside:all", "#footer:all");
+f("#aside:all", "#footer:all");
 
 // equivalent Vanilla JavaScript
 document.getElementById("aside").getElementsByTagName("*");
@@ -116,19 +122,11 @@ document.getElementById("footer").getElementsByTagName("*");
 <script src="my_js_directory_path/funnel.js"></script>
 ```
 
-<a name="access-selector"></a>
-### Access Selector
-
-```js
-var f = funneljs;
-// or
-var f = window.funneljs;
-```
 
 <a name="selector-methods"></a>
 ### Selector Methods
 
-**Selector.all** &mdash; gets children + descendants of elements in last stack.
+**Funnel.all** &mdash; gets children + descendants of elements in last stack.
 
 ```js
 // can be combined with source element
@@ -137,7 +135,7 @@ var query = f("#aside:all");
 var query = f("#aside").all();
 ```
 
-**Selector.attrs** &mdash; gets elements matching all supplied attributes.
+**Funnel.attrs** &mdash; gets elements matching all supplied attributes.
 
 ```js
 // get all elements contained in aside element
@@ -156,7 +154,7 @@ var filtered = query.attrs("[!class]");
 var filtered = query.attrs("[type=text]");
 ```
 
-**Selector.children** &mdash; gets element's children.
+**Funnel.children** &mdash; gets element's children.
 
 ```js
 // get aside element
@@ -165,7 +163,7 @@ var query = f("#aside");
 var next = query.children();
 ```
 
-**Selector.classes** &mdash; gets elements matching any of the supplied classes.
+**Funnel.classes** &mdash; gets elements matching any of the supplied classes.
 
 ```js
 // get all elements contained in aside element
@@ -178,7 +176,7 @@ var filtered = query.classes("active", "nav-item");
 var filtered = query.classes("!active", "!nav-item");
 ```
 
-**Selector.form** &mdash; Selector.attr shorthand.
+**Funnel.form** &mdash; Selector.attr shorthand.
 (List of possible input types [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input) and [here](http://www.w3schools.com/TAGS/att_input_type.asp))
 
 ```js
@@ -191,7 +189,7 @@ var filtered = query.form(":text");
 var filtered = query.attrs("[type=text]");
 ```
 
-**Selector.next** &mdash; gets the next element sibling of elements in last stack.
+**Funnel.next** &mdash; gets the next element sibling of elements in last stack.
 
 ```js
 // get aside element
@@ -201,7 +199,7 @@ var next = query.next(); // i.e. #aside2
 // **Note: if no element exists null is substituted
 ```
 
-**Selector.only** &mdash; filters out any element not in provided indices.
+**Funnel.only** &mdash; filters out any element not in provided indices.
 
 ```js
 // get all elements contained in aside element
@@ -210,7 +208,7 @@ var query = f("#aside:all");
 var filtered = query.only([0, 1, 2]);
 ```
 
-**Selector.parent** &mdash; gets element's parent.
+**Funnel.parent** &mdash; gets element's parent.
 
 ```js
 // get aside element
@@ -219,7 +217,7 @@ var query = f("#aside");
 var next = query.parent();
 ```
 
-**Selector.parents** &mdash; gets element's parents.
+**Funnel.parents** &mdash; gets element's parents.
 
 ```js
 // get aside element
@@ -228,13 +226,13 @@ var query = f("#aside");
 var next = query.parents();
 ```
 
-**Selector.pop** &mdash; returns elements for use.
+**Funnel.pop** &mdash; returns elements for use.
 
 ```js
-query.pop(); // returns elements are contained in an array
+query.pop();
 ```
 
-**Selector.prev** &mdash; gets the previous element sibling of elements in last stack.
+**Funnel.prev** &mdash; gets the previous element sibling of elements in last stack.
 
 ```js
 // get aside element
@@ -244,7 +242,7 @@ var prev = query.prev(); // i.e. #aside0
 // **Note: if no element exists null is substituted
 ```
 
-**Selector.range** &mdash; gets elements at specified indice range.
+**Funnel.range** &mdash; gets elements at specified indice range.
 
 ```js
 // get all elements contained in aside element
@@ -263,7 +261,7 @@ var query = f("#aside:all");
 var filtered = query.range([0, 5, 1]); // gets first 5 elements
 ```
 
-**Selector.siblings** &mdash; gets siblings of elements.
+**Funnel.siblings** &mdash; gets siblings of elements.
 
 ```js
 // get aside element
@@ -272,7 +270,7 @@ var query = f("#aside");
 var next = query.siblings();
 ```
 
-**Selector.skip** &mdash; filters out element at provided indices.
+**Funnel.skip** &mdash; filters out element at provided indices.
 
 ```js
 // get all elements contained in aside element
@@ -281,7 +279,7 @@ var query = f("#aside:all");
 var filtered = query.skip([0, -1]);
 ```
 
-**Selector.state** &mdash; gets elements with supplied state.
+**Funnel.state** &mdash; gets elements with supplied state.
 
 Possible states include <code>checked</code>, <code>selected</code>, <code>disabled</code>, <code>visible</code>, and <code>empty</code> (no elements or text nodes).
 
@@ -296,7 +294,7 @@ var checked = query.state("checked", true);
 var nonchecked = query.state("checked", false);
 ```
 
-**Selector.tags** &mdash; gets elements matching any of the supplied tag types.
+**Funnel.tags** &mdash; gets elements matching any of the supplied tag types.
 
 ```js
 // get all elements contained in aside element
@@ -309,13 +307,13 @@ var filtered = query.tags("input", "canvas");
 var filtered = query.tags("!input", "!canvas");
 ```
 
-**Selector.text_nodes** &mdash; gets the text nodes of elements in last stack.
+**Funnel.textNodes** &mdash; gets the text nodes of elements in last stack.
 
 ```js
 // get all elements contained in aside element
 var query = f("#aside:all");
 // filter all aside elements to get text nodes
-var text_nodes = query.text_nodes();
+var text_nodes = query.textNodes();
 ```
 
 <a name="contributing"></a>
@@ -325,10 +323,10 @@ Contributions are welcome! Found a bug, feel like documentation is lacking/confu
 
 See how to contribute [here](https://github.com/cgabriel5/funneljs/blob/master/CONTRIBUTING.md).
 
-<a name="todo"></a>
-### TODO
+<!-- <a name="todo"></a>
+### TODO -->
 
-- [ ] Improve performance and cut down repetitive code
+<!-- - [ ] Something TODO... -->
 
 <a name="license"></a>
 ### License
