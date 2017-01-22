@@ -2,7 +2,7 @@
 
     "use strict";
 
-    var libraryjs = (function() {
+    var library = (function() {
 
         // =============================== Helper Functions
 
@@ -339,7 +339,7 @@
                  * @return {Array|Object}  [Return elements array if invoked from constructor. Otherwise return
                                             self to allow method chaining.]
                  */
-                "text_nodes": function(source) {
+                "textNodes": function(source) {
 
                     // define vars
                     var elements = [],
@@ -963,7 +963,17 @@
 
     })();
 
+    // =============================== Global Library Functions/Methods/Vars
+
+    // =============================== Attach Library To Global Scope
+
     // add to global scope for ease of use
-    window.Funnel = libraryjs;
+    // use global app var or create it if not present
+    var app = (window.app || (window.app = {}));
+    // get the libs object from within the app object
+    // if it does not exist create it
+    var libs = (app.libs || (app.libs = {}));
+    // add the library to the libs object
+    libs.Funnel = library;
 
 })();
