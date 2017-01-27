@@ -949,6 +949,47 @@
                     var this_ = this;
                     return this_.stack[this_.stack.length - 1];
                 },
+                /**
+                 * @description [Combines (concats) provided array of elements with the current
+                 *               stack of elements.]
+                 * @param  {Array} new_elements [The array of elements to concats initial array with.]
+                 * @return {Object}  [Return self to allow method chaining.]
+                 */
+                "concat": function(new_elements) {
+
+                    // define vars
+                    var this_ = this,
+                        // the last stack
+                        array = this_.stack[this_.stack.length - 1],
+                        elements;
+
+                    // combine the last stack with the provided elements array
+                    elements = array.concat(new_elements || []);
+
+                    // add elements to the object
+                    this_.stack.push(elements);
+                    this_.length = elements.length;
+                    return this_;
+
+                },
+                /**
+                 * @description [Checks whether the last stack of is not empty.]
+                 * @param  {Array} new_elements [The array of elements to concats initial array with.]
+                 * @return {Boolean}  [True for non empty stack. Otherwise, false.]
+                 */
+                "iterable": function() {
+
+                    // check for elements in the last stack
+
+                    // define vars
+                    var this_ = this,
+                        // the last stack
+                        array = this_.stack[this_.stack.length - 1];
+
+                    // check if the last stack is not empty
+                    return (array.length ? true : false);
+
+                },
                 /** @description [Empty method; added to mask object as an array.] */
                 "splice": function() { /* noop */ },
             },
