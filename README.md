@@ -340,6 +340,26 @@ var $cont = f("#cont").pop()[0];
 var text_inputs = f($cont).all().attrs("[type=text]").pop();
 ```
 
+**Event Delegation Filtering** &mdash; Filtering can also be very handy when
+using event delegation.
+
+```js
+// attached click event listener to DOM
+document.addEventListener("click", function(e) {
+    
+    // cache the target element
+    var target = e.target;
+    // filter element to see if it's the element we want
+    var filtered = f(target).attrs("[id=cont]").pop()[0];
+
+    if (filtered) {
+        // handler logic
+        console.log("Target element clicked! :)");
+    }  // else ignore click 
+
+});
+```
+
 <a name="contributing"></a>
 ### Contributing
 
