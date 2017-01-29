@@ -10,6 +10,7 @@ Simple, standalone, lightweight JavaScript selector engine.
 [Source Point Examples](#source-point-examples)  
 [Add To Project](#add-to-project)  
 [Selector Methods](#selector-methods)  
+[Element Filtering](#element-filtering)  
 [Contributing](#contributing)  <!-- [TODO](#todo)   -->  
 [License](#license)  
 
@@ -314,6 +315,29 @@ var filtered = query.tags("!input", "!canvas");
 var query = f("#aside:all");
 // filter all aside elements to get text nodes
 var text_nodes = query.textNodes();
+```
+
+<a name="element-filtering"></a>
+### Element Filtering
+
+**Normal Filtering** &mdash; If `HTMLElements` are provided to FunnelJS, its methods can be used to filter
+the said elements. This is very handy when using event delegation.
+
+```html
+<div id="cont">
+    <input type="text">
+    <input type="password">
+    <input type="hidden">
+    <input type="text">
+</div>
+```
+
+```js
+// get the element with an ID of #cont
+var $cont = f("#cont").pop()[0];
+// using the $cont element get all its ancestors and return 
+// the ancestors that have the attribute type set to text
+var text_inputs = f($cont).all().attrs("[type=text]").pop();
 ```
 
 <a name="contributing"></a>
