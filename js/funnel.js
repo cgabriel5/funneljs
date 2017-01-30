@@ -942,12 +942,52 @@
 
                 },
                 /**
-                 * @description [Returns last element collection stack.]
+                 * @description [Returns last element collection stack. If an index is provided
+                 *               the element stack at that index is provided.]
+                 * @param  {Number} index [The element stack index to return.]
                  * @return {Array} [Last element collection.]
                  */
-                "pop": function() {
-                    var this_ = this;
-                    return this_.stack[this_.stack.length - 1];
+                "getStack": function(index) {
+
+                    // define vars
+                    var this_ = this,
+                        stacks = this_.stack.reverse();
+
+                    // default the index if not provided
+                    if (typeof index !== "number") index = (stacks.length - 1);
+
+                    // reset the index if provided index is negative
+                    if (index < 0) index = (stacks.length + index);
+
+                    // get the wanted element stack
+                    var stack = stacks[index];
+
+                    // return the appropriate stack
+                    return (stack ? stack : []);
+
+                },
+                /**
+                 * @description [Returns the first element of the last collection stack. If an
+                 *               index is provided that element at that index is returned.]
+                 * @param  {Number} index [The element stack index to return.]
+                 * @return {HTMLElement} [The needed element.]
+                 */
+                "getElement": function(index) {
+
+                    // define vars
+                    var this_ = this,
+                        stack = this_.getStack();
+
+                    // default the index if not provided
+                    if (typeof index !== "number") index = 0;
+
+                    // reset the index if provided index is negative
+                    if (index < 0) index = (stack.length + index);
+
+                    // return the first element of the last stack,
+                    // or the element at the index provided
+                    return stack[index];
+
                 },
                 /**
                  * @description [Combines (concats) provided array of elements with the current
