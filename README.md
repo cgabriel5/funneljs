@@ -10,6 +10,7 @@ Simple, standalone, lightweight JavaScript selector engine.
 [Source Point Examples](#source-point-examples)  
 [Add To Project](#add-to-project)  
 [Selector Methods](#selector-methods)  
+[Using Elements](#using-elements)  
 [Element Filtering](#element-filtering)  
 [Contributing](#contributing)  <!-- [TODO](#todo)   -->  
 [License](#license)  
@@ -39,16 +40,16 @@ f("#source_point_id", "#source_point_id_N")
 .filter1().filter2().filterN()
 ```
 
-* Finally, return elements for use with `pop()`:
+* Finally, return elements for use with `getStack()`:
 
 ```js
-.pop();
+.getStack();
 ```
 
 **Example**
 
 ```js
-f("#aside:all").tags("span", "div").pop();
+f("#aside:all").tags("span", "div").getStack();
 ```
 
 **Explanation**
@@ -58,7 +59,7 @@ f("#aside:all").tags("span", "div").pop();
 * The `tags()` filter is then used on the elements collection to only get
   elements with the tags of `span` or `div`.
 
-* Finally, the filtered collection is returned for use as an `array` with `pop()`.
+* Finally, the filtered collection is returned for use as an `array` with `getStack()`.
 
 <a name="what-is-a-source-point"></a>
 ### What's A Source Point?
@@ -227,12 +228,6 @@ var query = f("#aside");
 var next = query.parents();
 ```
 
-**Funnel.pop** &mdash; returns elements for use.
-
-```js
-query.pop();
-```
-
 **Funnel.prev** &mdash; gets the previous element sibling of elements in last stack.
 
 ```js
@@ -317,6 +312,40 @@ var query = f("#aside:all");
 var text_nodes = query.textNodes();
 ```
 
+<a name="using-elements"></a>
+### Using Elements
+
+**Funnel.getStack** &mdash; returns the last element stack for use.
+
+```js
+// The index is optional. Omitting it will return the last element stack.
+// However, if a previous stack is needed provide the index of the stack
+// to return. 
+query.getStack([?index]);
+
+// **Note: The initial elements that are passed to the Funnel() function make
+// up the first stack. Each method (filter) used after that will create an 
+// additional stack.
+// For example:
+f("#red", "#green") // first stack  (index:0) --> ["<#red>", "<#green>"]
+ .attrs("[id=red]") // second stack (index:1) --> ["<#red>"]
+// ...so...
+f("#red", "#green").attrs("[id=red]").getStack() // will return --> ["<#red>"]
+```
+
+**Funnel.getElement** &mdash; returns the first element of the last stack.
+
+```js
+// The index is optional. Omitting it will return the first element of the 
+// last element stack. Providing an index will return the element at that index.
+query.getElement([?index]);
+
+// For example:
+f("#red", "#green").getElement()  // will return --> <#red>
+f("#red", "#green").getElement(0) // will return --> <#red>
+f("#red", "#green").getElement(1) // will return --> <#green>
+```
+
 <a name="element-filtering"></a>
 ### Element Filtering
 
@@ -334,10 +363,10 @@ the said elements. This is very handy when using event delegation.
 
 ```js
 // get the element with an ID of #cont
-var $cont = f("#cont").pop()[0];
+var $cont = f("#cont").getElement();
 // using the $cont element get all its ancestors and return 
 // the ancestors that have the attribute type set to text
-var text_inputs = f($cont).all().attrs("[type=text]").pop();
+var text_inputs = f($cont).all().attrs("[type=text]").getStack();
 ```
 
 **Event Delegation Filtering** &mdash; Filtering can also be very handy when
@@ -350,7 +379,7 @@ document.addEventListener("click", function(e) {
     // cache the target element
     var target = e.target;
     // filter element to see if it's the element we want
-    var filtered = f(target).attrs("[id=cont]").pop()[0];
+    var filtered = f(target).attrs("[id=cont]").getElement();
 
     if (filtered) {
         // handler logic
