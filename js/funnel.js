@@ -95,34 +95,34 @@
 
         // =============================== Core Library Functions
 
-        /**
-         * @description [Checks if the supplied arrays have any items in common, or intersect.]
-         * @param  {Array}   array1 [The first array to perform comparison with.]
-         * @param  {Array}   array2 [The second array to perform comparison with.]
-         * @return {Boolean}        [description]
-         */
-        function intersect(array1, array2) {
-            // define vars
-            var short_array = array1,
-                long_array = array2,
-                i = 0,
-                l, a1_len = array1.length,
-                a2_len = array2.length;
-            // reset short and long arrays if arrays are equal in...
-            // ...length or if length of first array is less than that...
-            // ...of the second one.
-            if (a1_len === a2_len || a1_len < a2_len) {
-                short_array = array2;
-                long_array = array1;
-            }
-            // use length of short array as the last iteration stop.
-            // finally, check if arrays have anything in common.
-            // returning true if a commonality is found. otherwise return false
-            l = short_array.length;
-            for (; i < l; i++)
-                if (includes(long_array, short_array[i])) return true;
-            return false;
-        }
+        // /**
+        //  * @description [Checks if the supplied arrays have any items in common, or intersect.]
+        //  * @param  {Array}   array1 [The first array to perform comparison with.]
+        //  * @param  {Array}   array2 [The second array to perform comparison with.]
+        //  * @return {Boolean}        [description]
+        //  */
+        // function intersect(array1, array2) {
+        //     // define vars
+        //     var short_array = array1,
+        //         long_array = array2,
+        //         i = 0,
+        //         l, a1_len = array1.length,
+        //         a2_len = array2.length;
+        //     // reset short and long arrays if arrays are equal in...
+        //     // ...length or if length of first array is less than that...
+        //     // ...of the second one.
+        //     if (a1_len === a2_len || a1_len < a2_len) {
+        //         short_array = array2;
+        //         long_array = array1;
+        //     }
+        //     // use length of short array as the last iteration stop.
+        //     // finally, check if arrays have anything in common.
+        //     // returning true if a commonality is found. otherwise return false
+        //     l = short_array.length;
+        //     for (; i < l; i++)
+        //         if (includes(long_array, short_array[i])) return true;
+        //     return false;
+        // }
         /**
          * @description [Internal helper function. Is used when the "tags", "classes", or "text" filters are invoked.]
          * @param  {Array}          this_ [The Library object.]
@@ -951,19 +951,29 @@
 
                     // define vars
                     var this_ = this,
-                        stacks = this_.stack.reverse();
+                        stacks = this_.stack;
+
+                    // reverse the stacks. the stack needs to be reversed because every
+                    // time a new stack is added to the stack it gets appended to the
+                    // stack. therefore, the the latest stack is the last one, but to
+                    // make it easier to get the wanted stack the stacks are reversed
+                    // to make the latest stack be at the 0th index.
+                    stacks.reverse();
 
                     // default the index if not provided
-                    if (typeof index !== "number") index = (stacks.length - 1);
+                    if (typeof index !== "number") index = 0;
 
                     // reset the index if provided index is negative
                     if (index < 0) index = (stacks.length + index);
 
                     // get the wanted element stack
-                    var stack = stacks[index];
+                    var stack = stacks[index] || [];
+
+                    // unreverse array stack to revert it to its normal state
+                    stacks.reverse();
 
                     // return the appropriate stack
-                    return (stack ? stack : []);
+                    return stack;
 
                 },
                 /**
@@ -976,7 +986,7 @@
 
                     // define vars
                     var this_ = this,
-                        stack = this_.getStack();
+                        stack = this_.getStack.call(this_, index);
 
                     // default the index if not provided
                     if (typeof index !== "number") index = 0;
@@ -984,11 +994,23 @@
                     // reset the index if provided index is negative
                     if (index < 0) index = (stack.length + index);
 
+                    // get the wanted element
+                    var element = (stack[index] || null);
+
                     // return the first element of the last stack,
                     // or the element at the index provided
-                    return stack[index];
+                    return element;
 
                 },
+                /**
+                 * @status [No longer supported but kept for any possible future breakage.]
+                 * @description [Returns last element collection stack.]
+                 * @return {Array} [Last element collection.]
+                 */
+                // "pop": function() {
+                //     var this_ = this;
+                //     return this_.stack[this_.stack.length - 1];
+                // },
                 /**
                  * @description [Combines (concats) provided array of elements with the current
                  *               stack of elements.]
