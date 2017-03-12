@@ -16,7 +16,7 @@ Simple, standalone, lightweight JavaScript selector engine.
     * [Methods](#instance-methods-long) 
 
 [Usage](#usage)  
-* [Using Elements](#using-elements)  
+* [Getting Elements](#getting-elements)  
 * [Element Filtering](#element-filtering)  
 
 [Contributing](#contributing)  <!-- [TODO](#todo)   -->  
@@ -353,8 +353,11 @@ var query = f("#aside:all");
 var text_nodes = query.textNodes();
 ```
 
-<a name="using-elements"></a>
-### Using Elements
+<a name="usage"></a>
+### Usage
+
+<a name="getting-elements"></a>
+### Getting Elements
 
 **Funnel.getStack** &mdash; Returns the last element stack for use.
 
