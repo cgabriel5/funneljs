@@ -136,6 +136,9 @@ document.getElementById("aside").getElementsByTagName("*");
 document.getElementById("footer").getElementsByTagName("*");
 ```
 
+<a name="api"></a>
+### API
+
 <a name="instance-api"></a>
 ### API &mdash; Instance
 
