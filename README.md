@@ -4,19 +4,38 @@ Simple, standalone, lightweight JavaScript selector engine.
 
 ##### Table of Contents
 
-[Access Selector](#access-selector)  
+[What It Does](#what-it-does)  
+[Add To Project](#add-to-project)  
+[Access Library](#access-library)  
 [How It Works](#how-it-works)  
 [What's A Source Point](#what-is-a-source-point)  
 [Source Point Examples](#source-point-examples)  
-[Add To Project](#add-to-project)  
-[Selector Methods](#selector-methods)  
-[Using Elements](#using-elements)  
-[Element Filtering](#element-filtering)  
+[API](#api)  
+* [Instance](#instance-api)
+    * [QuickTable](#instance-quicktable-reference)  
+    * [Methods](#instance-methods-long) 
+
+[Usage](#usage)  
+* [Using Elements](#using-elements)  
+* [Element Filtering](#element-filtering)  
+
 [Contributing](#contributing)  <!-- [TODO](#todo)   -->  
 [License](#license)  
 
-<a name="access-selector"></a>
-### Access Selector
+<a name="what-it-does"></a>
+### What It Does
+
+* Get and filter elements from the DOM.
+
+<a name="add-to-project"></a>
+### Add To Project
+
+```html
+<script src="my_js_directory_path/funnel.js"></script>
+```
+
+<a name="access-library"></a>
+### Access Library
 
 ```js
 var f = window.app.libs.Funnel;
@@ -117,18 +136,37 @@ document.getElementById("aside").getElementsByTagName("*");
 document.getElementById("footer").getElementsByTagName("*");
 ```
 
-<a name="add-to-project"></a>
-### Add To Project
+<a name="instance-api"></a>
+### API &mdash; Instance
 
-```html
-<script src="my_js_directory_path/funnel.js"></script>
-```
+<a name="instance-quicktable-reference"></a>
+### Instance QuickTable Reference
 
+Method | Function
+------------ | -------------
+**all** | Gets children + descendants of elements in last stack
+**attrs** | Gets elements matching all supplied attributes
+**children** | Gets element's children
+**classes** | Gets elements matching any of the supplied classes
+**form** | Selector.attr shorthand
+**next** | Gets the next element sibling of elements in last stack
+**only** | Filters out any element not in provided indices
+**parent** | Gets element's parent
+**parents** | Gets element's parents
+**prev** | Gets the previous element sibling of elements in last stack
+**range** | Gets elements at specified indice range
+**siblings** | Gets siblings of elements
+**skip** | Filters out element at provided indices
+**state** | Gets elements with supplied state
+**tags** | Gets elements matching any of the supplied tag types
+**textNodes** | Gets the text nodes of elements in last stack
+**getStack** | Returns the last element stack for use
+**getElement** | Returns the first element of the last stack
 
-<a name="selector-methods"></a>
-### Selector Methods
+<a name="instance-methods-long"></a>
+### Instance Methods
 
-**Funnel.all** &mdash; gets children + descendants of elements in last stack.
+**Funnel.all** &mdash; Gets children + descendants of elements in last stack.
 
 ```js
 // can be combined with source element
@@ -137,7 +175,7 @@ var query = f("#aside:all");
 var query = f("#aside").all();
 ```
 
-**Funnel.attrs** &mdash; gets elements matching all supplied attributes.
+**Funnel.attrs** &mdash; Gets elements matching all supplied attributes.
 
 ```js
 // get all elements contained in aside element
@@ -156,7 +194,7 @@ var filtered = query.attrs("[!class]");
 var filtered = query.attrs("[type=text]");
 ```
 
-**Funnel.children** &mdash; gets element's children.
+**Funnel.children** &mdash; Gets element's children.
 
 ```js
 // get aside element
@@ -165,7 +203,7 @@ var query = f("#aside");
 var next = query.children();
 ```
 
-**Funnel.classes** &mdash; gets elements matching any of the supplied classes.
+**Funnel.classes** &mdash; Gets elements matching any of the supplied classes.
 
 ```js
 // get all elements contained in aside element
@@ -191,7 +229,7 @@ var filtered = query.form(":text");
 var filtered = query.attrs("[type=text]");
 ```
 
-**Funnel.next** &mdash; gets the next element sibling of elements in last stack.
+**Funnel.next** &mdash; Gets the next element sibling of elements in last stack.
 
 ```js
 // get aside element
@@ -201,7 +239,7 @@ var next = query.next(); // i.e. #aside2
 // **Note: if no element exists null is substituted
 ```
 
-**Funnel.only** &mdash; filters out any element not in provided indices.
+**Funnel.only** &mdash; Filters out any element not in provided indices.
 
 ```js
 // get all elements contained in aside element
@@ -210,7 +248,7 @@ var query = f("#aside:all");
 var filtered = query.only([0, 1, 2]);
 ```
 
-**Funnel.parent** &mdash; gets element's parent.
+**Funnel.parent** &mdash; Gets element's parent.
 
 ```js
 // get aside element
@@ -219,7 +257,7 @@ var query = f("#aside");
 var next = query.parent();
 ```
 
-**Funnel.parents** &mdash; gets element's parents.
+**Funnel.parents** &mdash; Gets element's parents.
 
 ```js
 // get aside element
@@ -228,7 +266,7 @@ var query = f("#aside");
 var next = query.parents();
 ```
 
-**Funnel.prev** &mdash; gets the previous element sibling of elements in last stack.
+**Funnel.prev** &mdash; Gets the previous element sibling of elements in last stack.
 
 ```js
 // get aside element
@@ -238,7 +276,7 @@ var prev = query.prev(); // i.e. #aside0
 // **Note: if no element exists null is substituted
 ```
 
-**Funnel.range** &mdash; gets elements at specified indice range.
+**Funnel.range** &mdash; Gets elements at specified indice range.
 
 ```js
 // get all elements contained in aside element
@@ -257,7 +295,7 @@ var query = f("#aside:all");
 var filtered = query.range([0, 5, 1]); // gets first 5 elements
 ```
 
-**Funnel.siblings** &mdash; gets siblings of elements.
+**Funnel.siblings** &mdash; Gets siblings of elements.
 
 ```js
 // get aside element
@@ -266,7 +304,7 @@ var query = f("#aside");
 var next = query.siblings();
 ```
 
-**Funnel.skip** &mdash; filters out element at provided indices.
+**Funnel.skip** &mdash; Filters out element at provided indices.
 
 ```js
 // get all elements contained in aside element
@@ -275,7 +313,7 @@ var query = f("#aside:all");
 var filtered = query.skip([0, -1]);
 ```
 
-**Funnel.state** &mdash; gets elements with supplied state.
+**Funnel.state** &mdash; Gets elements with supplied state.
 
 Possible states include <code>checked</code>, <code>selected</code>, <code>disabled</code>, <code>visible</code>, and <code>empty</code> (no elements or text nodes).
 
@@ -290,7 +328,7 @@ var checked = query.state("checked", true);
 var nonchecked = query.state("checked", false);
 ```
 
-**Funnel.tags** &mdash; gets elements matching any of the supplied tag types.
+**Funnel.tags** &mdash; Gets elements matching any of the supplied tag types.
 
 ```js
 // get all elements contained in aside element
@@ -303,7 +341,7 @@ var filtered = query.tags("input", "canvas");
 var filtered = query.tags("!input", "!canvas");
 ```
 
-**Funnel.textNodes** &mdash; gets the text nodes of elements in last stack.
+**Funnel.textNodes** &mdash; Gets the text nodes of elements in last stack.
 
 ```js
 // get all elements contained in aside element
@@ -315,7 +353,7 @@ var text_nodes = query.textNodes();
 <a name="using-elements"></a>
 ### Using Elements
 
-**Funnel.getStack** &mdash; returns the last element stack for use.
+**Funnel.getStack** &mdash; Returns the last element stack for use.
 
 ```js
 // The index is optional. Omitting it will return the last element stack.
@@ -333,7 +371,7 @@ f("#red", "#green") // first stack  (index:0) --> ["<#red>", "<#green>"]
 f("#red", "#green").attrs("[id=red]").getStack() // will return --> ["<#red>"]
 ```
 
-**Funnel.getElement** &mdash; returns the first element of the last stack.
+**Funnel.getElement** &mdash; Returns the first element of the last stack.
 
 ```js
 // The index is optional. Omitting it will return the first element of the 
