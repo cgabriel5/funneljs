@@ -8,8 +8,9 @@ Simple, standalone, lightweight JavaScript selector engine.
 [Add To Project](#add-to-project)  
 [Access Library](#access-library)  
 [How It Works](#how-it-works)  
-[What's A Source Point](#what-is-a-source-point)  
-[Source Point Examples](#source-point-examples)  
+* [What's A Source Point](#what-is-a-source-point)  
+* [Source Point Examples](#source-point-examples)  
+
 [API](#api)  
 * [Instance](#instance-api)
     * [QuickTable](#instance-quicktable-reference)  
