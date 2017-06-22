@@ -32,7 +32,7 @@ Simple, standalone, lightweight JavaScript selector engine.
 ### Add To Project
 
 ```html
-<script src="my_js_directory_path/funnel.js"></script>
+<script src="path/to/funnel.js"></script>
 ```
 
 <a name="access-library"></a>
