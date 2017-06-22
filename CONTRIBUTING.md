@@ -15,5 +15,3 @@ Contributions are welcome! Found a bug, feel like documentation is lacking/confu
 4. **Push** your work back up to your fork
 5. **Submit** a Pull Request so your changes can be reviewed
 6. Now wait as your Pull Request gets reviewed. ;)
-
-
