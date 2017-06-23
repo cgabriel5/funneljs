@@ -125,7 +125,7 @@
                     "modules/globals.js",
                     "modules/bottom.js",
                     "lib.iife.end.js",
-                    "app.js"
+                    "test.js"
                 ],
                 "webapp": [
                     "app.iife.top.js",
