@@ -286,14 +286,14 @@ var prev = query.prev(); // i.e. #aside0
 // get all elements contained in aside element
 var query = f("#aside:all");
 
-// range format => [start_index, end_index, step]
+// range format --> [start_index, end_index, step]
 // **Note: an end_index of -1 signals to use length of array
 
-// even   range => [0, -1, 2]
-// odd    range => [1, -1, 2]
-// entire range => [0, -1, 1]
-// < 3    range => [0, 3, 1]
-// > 4    range => [4, -1, 1]
+// even   range --> [0, -1, 2]
+// odd    range --> [1, -1, 2]
+// entire range --> [0, -1, 1]
+// < 3    range --> [0, 3, 1]
+// > 4    range --> [4, -1, 1]
 
 // example 1
 var filtered = query.range([0, 5, 1]); // gets first 5 elements
@@ -418,7 +418,7 @@ var text_inputs = f($cont).all().attrs("[type=text]").getStack();
 using event delegation.
 
 ```js
-// attached click event listener to DOM
+// click event listener
 document.addEventListener("click", function(e) {
     
     // cache the target element
