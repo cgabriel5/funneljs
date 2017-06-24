@@ -257,14 +257,14 @@ f(<span class="hljs-string">"#aside:all"</span>, <span class="hljs-string">"#foo
 <pre class="hljs"><code><span class="hljs-comment">// get all elements contained in aside element</span>
 <span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside:all"</span>);
 
-<span class="hljs-comment">// range format =&gt; [start_index, end_index, step]</span>
+<span class="hljs-comment">// range format --&gt; [start_index, end_index, step]</span>
 <span class="hljs-comment">// **Note: an end_index of -1 signals to use length of array</span>
 
-<span class="hljs-comment">// even   range =&gt; [0, -1, 2]</span>
-<span class="hljs-comment">// odd    range =&gt; [1, -1, 2]</span>
-<span class="hljs-comment">// entire range =&gt; [0, -1, 1]</span>
-<span class="hljs-comment">// &lt; 3    range =&gt; [0, 3, 1]</span>
-<span class="hljs-comment">// &gt; 4    range =&gt; [4, -1, 1]</span>
+<span class="hljs-comment">// even   range --&gt; [0, -1, 2]</span>
+<span class="hljs-comment">// odd    range --&gt; [1, -1, 2]</span>
+<span class="hljs-comment">// entire range --&gt; [0, -1, 1]</span>
+<span class="hljs-comment">// &lt; 3    range --&gt; [0, 3, 1]</span>
+<span class="hljs-comment">// &gt; 4    range --&gt; [4, -1, 1]</span>
 
 <span class="hljs-comment">// example 1</span>
 <span class="hljs-keyword">var</span> filtered = query.range([<span class="hljs-number">0</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>]); <span class="hljs-comment">// gets first 5 elements</span></code></pre><p><strong>Funnel.siblings</strong> &mdash; Gets siblings of elements.</p>
@@ -336,7 +336,7 @@ the said elements. This is very handy when using event delegation.</p>
 <span class="hljs-comment">// the ancestors that have the attribute type set to text</span>
 <span class="hljs-keyword">var</span> text_inputs = f($cont).all().attrs(<span class="hljs-string">"[type=text]"</span>).getStack();</code></pre><p><strong>Event Delegation Filtering</strong> &mdash; Filtering can also be very handy when
 using event delegation.</p>
-<pre class="hljs"><code><span class="hljs-comment">// attached click event listener to DOM</span>
+<pre class="hljs"><code><span class="hljs-comment">// click event listener</span>
 <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">"click"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
 
     <span class="hljs-comment">// cache the target element</span>
