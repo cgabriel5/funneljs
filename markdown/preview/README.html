@@ -40,7 +40,7 @@
 </ul>
 <p><a name="add-to-project"></a></p>
 <h3 id="add-to-project">Add To Project</h3>
-<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"path/to/funnel.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre><p><a name="access-library"></a></p>
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"path/to/lib.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre><p><a name="access-library"></a></p>
 <h3 id="access-library">Access Library</h3>
 <pre class="hljs"><code><span class="hljs-keyword">var</span> f = <span class="hljs-built_in">window</span>.app.libs.Funnel;</code></pre><p><a name="how-it-works"></a></p>
 <h3 id="how-it-works">How It Works</h3>
@@ -189,6 +189,14 @@ f(<span class="hljs-string">"#aside:all"</span>, <span class="hljs-string">"#foo
 <td><strong>getElement</strong></td>
 <td>Returns the first element of the last stack</td>
 </tr>
+<tr>
+<td><strong>concat</strong></td>
+<td>Combines element stacks.</td>
+</tr>
+<tr>
+<td><strong>iterable</strong></td>
+<td>Property indicating whether the last element stack contains elements.</td>
+</tr>
 </tbody>
 </table>
 <p><a name="instance-methods-long"></a></p>
@@ -321,7 +329,25 @@ query.getElement([?index]);
 <span class="hljs-comment">// For example:</span>
 f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).getElement()  <span class="hljs-comment">// will return --&gt; &lt;#red&gt;</span>
 f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).getElement(<span class="hljs-number">0</span>) <span class="hljs-comment">// will return --&gt; &lt;#red&gt;</span>
-f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).getElement(<span class="hljs-number">1</span>) <span class="hljs-comment">// will return --&gt; &lt;#green&gt;</span></code></pre><p><a name="element-filtering"></a></p>
+f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).getElement(<span class="hljs-number">1</span>) <span class="hljs-comment">// will return --&gt; &lt;#green&gt;</span></code></pre><p><strong>Funnel.concat</strong> &mdash; Combines element stacks.<br><strong>Funnel.iterable</strong> &mdash; Property indicating whether the last element stack contains elements.</p>
+<pre class="hljs"><code><span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">"click"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+
+    <span class="hljs-comment">// cache the target element</span>
+    <span class="hljs-keyword">var</span> target = e.target;
+
+    <span class="hljs-comment">// get the targets parents</span>
+    <span class="hljs-keyword">var</span> parents = f(target).parents().getStack();
+    <span class="hljs-comment">// combine the parents with the target return elements </span>
+    <span class="hljs-comment">// that contain the class "option-status"</span>
+    <span class="hljs-keyword">var</span> filtered = f(target).concat(parents).classes(<span class="hljs-string">"option-status"</span>);
+
+    <span class="hljs-comment">// if there are elements in the last filtered stack...</span>
+    <span class="hljs-keyword">if</span> (filtered.iterable) {
+        <span class="hljs-keyword">var</span> delegate = filtered.getElement();
+        <span class="hljs-comment">// do something with delegate...</span>
+    }
+
+}, <span class="hljs-literal">false</span>);</code></pre><p><a name="element-filtering"></a></p>
 <h3 id="element-filtering">Element Filtering</h3>
 <p><strong>Normal Filtering</strong> &mdash; If <code>HTMLElements</code> are provided to FunnelJS, its methods can be used to filter
 the said elements. This is very handy when using event delegation.</p>

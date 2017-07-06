@@ -166,6 +166,8 @@ Method | Function
 **textNodes** | Gets the text nodes of elements in last stack
 **getStack** | Returns the last element stack for use
 **getElement** | Returns the first element of the last stack
+**concat** | Combines element stacks.
+**iterable** | Property indicating whether the last element stack contains elements.
 
 <a name="instance-methods-long"></a>
 ### Instance Methods
@@ -389,6 +391,30 @@ query.getElement([?index]);
 f("#red", "#green").getElement()  // will return --> <#red>
 f("#red", "#green").getElement(0) // will return --> <#red>
 f("#red", "#green").getElement(1) // will return --> <#green>
+```
+
+**Funnel.concat** &mdash; Combines element stacks.  
+**Funnel.iterable** &mdash; Property indicating whether the last element stack contains elements.
+
+```js
+document.addEventListener("click", function(e) {
+
+    // cache the target element
+    var target = e.target;
+
+    // get the targets parents
+    var parents = f(target).parents().getStack();
+    // combine the parents with the target return elements 
+    // that contain the class "option-status"
+    var filtered = f(target).concat(parents).classes("option-status");
+
+    // if there are elements in the last filtered stack...
+    if (filtered.iterable) {
+        var delegate = filtered.getElement();
+        // do something with delegate...
+    }
+
+}, false);
 ```
 
 <a name="element-filtering"></a>
