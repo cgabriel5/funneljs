@@ -404,9 +404,9 @@ document.addEventListener("click", function(e) {
 
     // get the targets parents
     var parents = f(target).parents().getStack();
-    // combine the parents with the target return elements 
-    // that contain the class "option-status"
-    var filtered = f(target).concat(parents).classes("option-status");
+    // combine the parents with the target to return elements 
+    // that contain the class green
+    var filtered = f(target).concat(parents).classes("green");
 
     // if there are elements in the last filtered stack...
     if (filtered.iterable) {
