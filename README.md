@@ -415,6 +415,26 @@ document.addEventListener("click", function(e) {
     }
 
 }, false);
+
+// ...or use it this way as it's the same thing
+
+document.addEventListener("click", function(e) {
+
+    // cache the target element
+    var target = e.target;
+
+    // get the targets parents
+    var parents = f(target).parents().getStack();
+    // combine the parents with the target to return elements 
+    // that contain the class green
+    var delegate = f(target).concat(parents).classes("green").getElement();
+
+    // if there are elements in the last filtered stack...
+    if (delegate) {
+        // do something with delegate...
+    }
+
+}, false);
 ```
 
 <a name="element-filtering"></a>

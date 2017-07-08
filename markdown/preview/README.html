@@ -347,6 +347,26 @@ f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</s
         <span class="hljs-comment">// do something with delegate...</span>
     }
 
+}, <span class="hljs-literal">false</span>);
+
+<span class="hljs-comment">// ...or use it this way as it's the same thing</span>
+
+<span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">"click"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+
+    <span class="hljs-comment">// cache the target element</span>
+    <span class="hljs-keyword">var</span> target = e.target;
+
+    <span class="hljs-comment">// get the targets parents</span>
+    <span class="hljs-keyword">var</span> parents = f(target).parents().getStack();
+    <span class="hljs-comment">// combine the parents with the target to return elements </span>
+    <span class="hljs-comment">// that contain the class green</span>
+    <span class="hljs-keyword">var</span> delegate = f(target).concat(parents).classes(<span class="hljs-string">"green"</span>).getElement();
+
+    <span class="hljs-comment">// if there are elements in the last filtered stack...</span>
+    <span class="hljs-keyword">if</span> (delegate) {
+        <span class="hljs-comment">// do something with delegate...</span>
+    }
+
 }, <span class="hljs-literal">false</span>);</code></pre><p><a name="element-filtering"></a></p>
 <h3 id="element-filtering">Element Filtering</h3>
 <p><strong>Normal Filtering</strong> &mdash; If <code>HTMLElements</code> are provided to FunnelJS, its methods can be used to filter
