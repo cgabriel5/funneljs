@@ -14,25 +14,26 @@
     <article class="markdown-body"><h1 id="funneljs">funneljs</h1>
 <p>Simple, standalone, lightweight JavaScript selector engine.</p>
 <h5 id="table-of-contents">Table of Contents</h5>
-<p><a href="#what-it-does">What It Does</a><br><a href="#add-to-project">Add To Project</a><br><a href="#access-library">Access Library</a><br><a href="#how-it-works">How It Works</a>  </p>
 <ul class="list">
-<li><a href="#what-is-a-source-point">What&#39;s A Source Point</a>  </li>
-<li><a href="#source-point-examples">Source Point Examples</a>  </li>
-</ul>
-<p><a href="#api">API</a>  </p>
-<ul class="list">
-<li><a href="#instance-api">Instance</a><ul class="list">
-<li><a href="#instance-quicktable-reference">QuickTable</a>  </li>
-<li><a href="#instance-methods-long">Methods</a> </li>
+<li><a href="#project-setup">Project Setup</a></li>
+<li><a href="#what-it-does">What It Does</a></li>
+<li><a href="#add-to-project">Add To Project</a></li>
+<li><a href="#how-it-works">How It Works</a></li>
+<li><a href="#api">API</a><ul class="list">
+<li><a href="#instance-api">Instance</a></li>
 </ul>
 </li>
+<li><a href="#usage">Usage</a><ul class="list">
+<li><a href="#filtering-general">General Filtering</a></li>
+<li><a href="#filtering-event-delegation">Event Delegation Filtering</a></li>
 </ul>
-<p><a href="#usage">Usage</a>  </p>
-<ul class="list">
-<li><a href="#getting-elements">Getting Elements</a>  </li>
-<li><a href="#element-filtering">Element Filtering</a>  </li>
+</li>
+<li><a href="#contributing">Contributing</a>  </li>
+<li><a href="#license">License</a></li>
 </ul>
-<p><a href="#contributing">Contributing</a>  <!-- [TODO](#todo)   --><br><a href="#license">License</a>  </p>
+<p><a name="project-setup"></a></p>
+<h3 id="project-setup">Project Setup</h3>
+<p>Project uses <a href="https://github.com/cgabriel5/snippets/tree/master/boilerplate/application">this</a> boilerplate. Its <a href="https://github.com/cgabriel5/snippets/blob/master/boilerplate/application/README.md#-read-before-use">README.md</a> contains instructions for <code>Yarn</code> and <code>Gulp</code>.</p>
 <p><a name="what-it-does"></a></p>
 <h3 id="what-it-does">What It Does</h3>
 <ul class="list">
@@ -40,296 +41,322 @@
 </ul>
 <p><a name="add-to-project"></a></p>
 <h3 id="add-to-project">Add To Project</h3>
-<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"path/to/lib.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre><p><a name="access-library"></a></p>
-<h3 id="access-library">Access Library</h3>
-<pre class="hljs"><code><span class="hljs-keyword">var</span> f = <span class="hljs-built_in">window</span>.app.libs.Funnel;</code></pre><p><a name="how-it-works"></a></p>
+<p><strong>Note</strong>: The library, both minimized and unminimized, is located in <code>lib/</code>.</p>
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"path/to/lib.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-built_in">document</span>.onreadystatechange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-meta">    "use strict"</span>;
+    <span class="hljs-comment">// once all resources have loaded</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>.readyState == <span class="hljs-string">"complete"</span>) {
+        <span class="hljs-comment">// get the library</span>
+        <span class="hljs-keyword">var</span> f = <span class="hljs-built_in">window</span>.app.libs.Funnel;
+        <span class="hljs-comment">// logic...</span>
+    }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre><p><a name="how-it-works"></a></p>
 <h3 id="how-it-works">How It Works</h3>
 <p>funneljs works by using a broad collection of elements which are then subjected
 to filters to get/exclude elements.</p>
 <ul class="list">
-<li>Get elements from source points:</li>
+<li>General Overview:<ul class="list">
+<li><strong>Step 1</strong> &mdash; Get elements from source points:<ul class="list">
+<li><code>f(&quot;#source_point_id&quot;, &quot;#source_point_id_N&quot;)</code></li>
 </ul>
-<pre class="hljs"><code>f(<span class="hljs-string">"#source_point_id"</span>, <span class="hljs-string">"#source_point_id_N"</span>)</code></pre><ul class="list">
-<li>Chain filters to get/exclude elements:</li>
-</ul>
-<pre class="hljs"><code>.filter1().filter2().filterN()</code></pre><ul class="list">
-<li>Finally, return elements for use with <code>getStack()</code>:</li>
-</ul>
-<pre class="hljs"><code>.getStack();</code></pre><p><strong>Example</strong></p>
-<pre class="hljs"><code>f(<span class="hljs-string">"#aside:all"</span>).tags(<span class="hljs-string">"span"</span>, <span class="hljs-string">"div"</span>).getStack();</code></pre><p><strong>Explanation</strong></p>
-<ul class="list">
-<li><p>Query uses element with the ID of <code>aside</code> as its source point. The <code>:all</code> attached to source point means to grab ALL its descendants.</p>
 </li>
-<li><p>The <code>tags()</code> filter is then used on the elements collection to only get
-elements with the tags of <code>span</code> or <code>div</code>.</p>
+<li><strong>Step 2</strong> &mdash; Chain filters to get/exclude elements:<ul class="list">
+<li><code>.filter1().filter2().filterN()</code></li>
+</ul>
 </li>
-<li><p>Finally, the filtered collection is returned for use as an <code>array</code> with <code>getStack()</code>.</p>
+<li><strong>Step 3</strong> &mdash; Finally, return element(s) via: <ul class="list">
+<li><code>getStack</code> or <code>getElement</code>:</li>
+</ul>
+</li>
+<li><strong>Example</strong> &mdash; <code>f(&quot;#aside:all&quot;).tags(&quot;span&quot;, &quot;div&quot;).getStack();</code></li>
+<li><strong>Explanation</strong> &mdash; Query uses the element with the ID of <code>aside</code> as its source point. The inline <code>:all</code> means to grab <em>ALL</em> its descendants. The <code>tags()</code> filter is then used on the elements collection to only get elements with the tags of <code>span</code> or <code>div</code>. Finally, the filtered collection is returned for use as an <code>Array</code> with <code>getStack()</code>.</li>
+</ul>
 </li>
 </ul>
-<p><a name="what-is-a-source-point"></a></p>
-<h3 id="what's-a-source-point?">What&#39;s A Source Point?</h3>
-<p>A source point is just an element. This element is used to grab all its descendants
-to build the collection of elements we want to filter. Querying the DOM is an
-expensive task as it searches the entire DOM for your wanted elements. Rather than
-search the entire DOM, this method focuses its search on the descendants of the source
-point elements.</p>
-<p><a name="source-point-examples"></a></p>
-<h3 id="source-point-examples">Source Point Examples</h3>
-<p><strong>Things to note:</strong></p>
-<ol class="list">
-<li>Source point must be an element <code>ID</code> or a <code>DOMElement</code></li>
-<li>N number of source points is possible.</li>
-</ol>
-<pre class="hljs"><code><span class="hljs-comment">// source point</span>
-f(<span class="hljs-string">"#aside"</span>);
-
-<span class="hljs-comment">// equivalent Vanilla JavaScript</span>
-<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"aside"</span>);</code></pre><pre class="hljs"><code><span class="hljs-comment">// source point</span>
-f(<span class="hljs-string">"#aside:all"</span>);
-
-<span class="hljs-comment">// same as source point</span>
-f(<span class="hljs-string">"#aside"</span>).all();
-
-<span class="hljs-comment">// equivalent Vanilla JavaScript</span>
-<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"aside"</span>).getElementsByTagName(<span class="hljs-string">"*"</span>);</code></pre><pre class="hljs"><code><span class="hljs-comment">// source point</span>
-f(<span class="hljs-string">"#aside"</span>, <span class="hljs-string">"#footer:all"</span>);
-
-<span class="hljs-comment">// equivalent Vanilla JavaScript</span>
-<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"aside"</span>);
-+
-<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"footer"</span>).getElementsByTagName(<span class="hljs-string">"*"</span>);</code></pre><pre class="hljs"><code><span class="hljs-comment">// source point</span>
-f(<span class="hljs-string">"#aside:all"</span>, <span class="hljs-string">"#footer:all"</span>);
-
-<span class="hljs-comment">// equivalent Vanilla JavaScript</span>
-<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"aside"</span>).getElementsByTagName(<span class="hljs-string">"*"</span>);
-+
-<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"footer"</span>).getElementsByTagName(<span class="hljs-string">"*"</span>);</code></pre><p><a name="api"></a></p>
-<h3 id="api">API</h3>
+<p><a name="api"></a></p>
+<h2 id="api">API</h2>
 <p><a name="instance-api"></a></p>
 <h3 id="api-&mdash;-instance">API &mdash; Instance</h3>
-<p><a name="instance-quicktable-reference"></a></p>
-<h3 id="instance-quicktable-reference">Instance QuickTable Reference</h3>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Function</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>all</strong></td>
-<td>Gets children + descendants of elements in last stack</td>
-</tr>
-<tr>
-<td><strong>attrs</strong></td>
-<td>Gets elements matching all supplied attributes</td>
-</tr>
-<tr>
-<td><strong>children</strong></td>
-<td>Gets element&#39;s children</td>
-</tr>
-<tr>
-<td><strong>classes</strong></td>
-<td>Gets elements matching any of the supplied classes</td>
-</tr>
-<tr>
-<td><strong>form</strong></td>
-<td>Selector.attr shorthand</td>
-</tr>
-<tr>
-<td><strong>next</strong></td>
-<td>Gets the next element sibling of elements in last stack</td>
-</tr>
-<tr>
-<td><strong>only</strong></td>
-<td>Filters out any element not in provided indices</td>
-</tr>
-<tr>
-<td><strong>parent</strong></td>
-<td>Gets element&#39;s parent</td>
-</tr>
-<tr>
-<td><strong>parents</strong></td>
-<td>Gets element&#39;s parents</td>
-</tr>
-<tr>
-<td><strong>prev</strong></td>
-<td>Gets the previous element sibling of elements in last stack</td>
-</tr>
-<tr>
-<td><strong>range</strong></td>
-<td>Gets elements at specified indice range</td>
-</tr>
-<tr>
-<td><strong>siblings</strong></td>
-<td>Gets siblings of elements</td>
-</tr>
-<tr>
-<td><strong>skip</strong></td>
-<td>Filters out element at provided indices</td>
-</tr>
-<tr>
-<td><strong>state</strong></td>
-<td>Gets elements with supplied state</td>
-</tr>
-<tr>
-<td><strong>tags</strong></td>
-<td>Gets elements matching any of the supplied tag types</td>
-</tr>
-<tr>
-<td><strong>textNodes</strong></td>
-<td>Gets the text nodes of elements in last stack</td>
-</tr>
-<tr>
-<td><strong>getStack</strong></td>
-<td>Returns the last element stack for use</td>
-</tr>
-<tr>
-<td><strong>getElement</strong></td>
-<td>Returns the first element of the last stack</td>
-</tr>
-<tr>
-<td><strong>concat</strong></td>
-<td>Combines element stacks.</td>
-</tr>
-<tr>
-<td><strong>iterable</strong></td>
-<td>Property indicating whether the last element stack contains elements.</td>
-</tr>
-</tbody>
-</table>
-<p><a name="instance-methods-long"></a></p>
+<p><a name="instance-methods-toc"></a></p>
+<ul class="list">
+<li><a href="#instance-creation">Instance</a><ul class="list">
+<li><a href="#what-is-a-source-point">What&#39;s A Source Point?</a></li>
+<li><a href="#source-point-comparisons">Source Point Comparisons</a></li>
+<li><a href="#the-stack">The Stack</a></li>
+<li><a href="#instance-methods-all">➜ instance.all()</a></li>
+<li><a href="#instance-methods-attrs">➜ instance.attrs()</a></li>
+<li><a href="#instance-methods-children">➜ instance.children()</a></li>
+<li><a href="#instance-methods-classes">➜ instance.classes()</a></li>
+<li><a href="#instance-methods-form">➜ instance.form()</a></li>
+<li><a href="#instance-methods-next">➜ instance.next()</a></li>
+<li><a href="#instance-methods-only">➜ instance.only()</a></li>
+<li><a href="#instance-methods-parent">➜ instance.parent()</a></li>
+<li><a href="#instance-methods-parents">➜ instance.parents()</a></li>
+<li><a href="#instance-methods-prev">➜ instance.prev()</a></li>
+<li><a href="#instance-methods-range">➜ instance.range()</a></li>
+<li><a href="#instance-methods-siblings">➜ instance.siblings()</a></li>
+<li><a href="#instance-methods-skip">➜ instance.skip()</a></li>
+<li><a href="#instance-methods-state">➜ instance.state()</a></li>
+<li><a href="#instance-methods-tags">➜ instance.tags()</a></li>
+<li><a href="#instance-methods-textnodes">➜ instance.textNodes()</a></li>
+<li><a href="#instance-methods-getstack">➜ instance.getStack()</a></li>
+<li><a href="#instance-methods-getelement">➜ instance.getElement()</a></li>
+<li><a href="#instance-methods-concat">➜ instance.concat()</a></li>
+<li><a href="#instance-methods-iterable">➜ instance.iterable()</a></li>
+</ul>
+</li>
+</ul>
+<p><a name="instance-creation"></a></p>
+<h3 id="instance-creation">Instance Creation</h3>
+<ul class="list">
+<li><code>sourcePoint</code> (<code>String|HTMLElement</code>, <em>Required</em>) The source point to use.<ul class="list">
+<li><strong>Note</strong>: <code>n</code> amount of <code>sourcePoint</code>s may be passed.</li>
+</ul>
+</li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<p><strong>Note</strong>: Using the <code>new</code> keyword is not necessary. The library will make sure to use it for when when you don&#39;t.</p>
+<pre class="hljs"><code><span class="hljs-comment">// this...</span>
+<span class="hljs-keyword">var</span> query = <span class="hljs-keyword">new</span> Funnel(<span class="hljs-string">"#container"</span>, <span class="hljs-string">"#sidebar"</span>);
+<span class="hljs-comment">// is the same as this</span>
+<span class="hljs-keyword">var</span> query = Funnel(<span class="hljs-string">"#container"</span>, <span class="hljs-string">"#sidebar"</span>);</code></pre><p><a name="what-is-a-source-point"></a></p>
+<h3 id="what's-a-source-point?">What&#39;s A Source Point?</h3>
+<p>A source point is just an element. This element is used to grab all its descendants
+to build the collection of elements wanted to filter. Querying the DOM is an
+expensive task as it searches the entire DOM for your wanted elements. Rather than
+search the entire DOM, this method pin-points its search on the descendants of selected source
+point elements.</p>
+<p><a name="source-point-comparisons"></a></p>
+<h3 id="source-point-comparisons">Source Point Comparisons</h3>
+<pre class="hljs"><code><span class="hljs-comment">// this...</span>
+f(<span class="hljs-string">"#aside"</span>); 
+<span class="hljs-comment">// is essentially...</span>
+<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"aside"</span>);</code></pre><pre class="hljs"><code><span class="hljs-comment">// this...</span>
+f(<span class="hljs-string">"#aside:all"</span>); 
+<span class="hljs-comment">// or...</span>
+f(<span class="hljs-string">"#aside"</span>).all();
+<span class="hljs-comment">// is essentially this...</span>
+<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"aside"</span>).getElementsByTagName(<span class="hljs-string">"*"</span>);</code></pre><pre class="hljs"><code><span class="hljs-comment">// this...</span>
+f(<span class="hljs-string">"#aside"</span>, <span class="hljs-string">"#footer:all"</span>);
+<span class="hljs-comment">// is the essentially both this...</span>
+<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"aside"</span>);
+<span class="hljs-comment">// and this...</span>
+<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"footer"</span>).getElementsByTagName(<span class="hljs-string">"*"</span>);</code></pre><pre class="hljs"><code><span class="hljs-comment">// this...</span>
+f(<span class="hljs-string">"#aside:all"</span>, <span class="hljs-string">"#footer:all"</span>);
+<span class="hljs-comment">// is the essentially both this...</span>
+<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"aside"</span>).getElementsByTagName(<span class="hljs-string">"*"</span>);
+<span class="hljs-comment">// and this...</span>
+<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"footer"</span>).getElementsByTagName(<span class="hljs-string">"*"</span>);</code></pre><p><a name="the-stack"></a></p>
+<h3 id="the-stack">The Stack</h3>
+<p>The initial elements that are passed to the <code>Funnel</code> instance make up the first stack. Each method (filter) used after that will create an additional element stack. Therefore, the <code>getStack</code> method will always return a stack, or element collection. By default it returns the last stack but can return any of the previous stacks. The <code>getElement</code> method will always return the <em>first</em> element of the <em>last</em> stack.</p>
+<pre class="hljs"><code><span class="hljs-comment">// For example, the following contains 2 stacks...</span>
+f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).attrs(<span class="hljs-string">"[id=red]"</span>) 
+
+<span class="hljs-comment">// first stack  (index:0) --&gt; ["&lt;#red&gt;", "&lt;#green&gt;"]</span>
+<span class="hljs-comment">// second stack (index:1) --&gt; ["&lt;#red&gt;"]</span>
+
+<span class="hljs-comment">// Therefore...</span>
+
+f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).attrs(<span class="hljs-string">"[id=red]"</span>).getStack() 
+<span class="hljs-comment">// will return the last (most current) stack --&gt; ["&lt;#red&gt;"]</span></code></pre><p><a name="instance-methods-long"></a></p>
 <h3 id="instance-methods">Instance Methods</h3>
-<p><strong>Funnel.all</strong> &mdash; Gets children + descendants of elements in last stack.</p>
+<p><a name="instance-methods-all"></a>
+➜ <strong>instance.all</strong> &mdash; Gets children and descendants of elements in last stack.</p>
+<ul class="list">
+<li><strong>No Parameters</strong></li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
 <pre class="hljs"><code><span class="hljs-comment">// can be combined with source element</span>
 <span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside:all"</span>);
 <span class="hljs-comment">// or used as a chained method</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside"</span>).all();</code></pre><p><strong>Funnel.attrs</strong> &mdash; Gets elements matching all supplied attributes.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get all elements contained in aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside:all"</span>);
+<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside"</span>).all();</code></pre><p><a name="instance-methods-attrs"></a>
+➜ <strong>instance.attrs(<code>attribute</code>, <code>attributeN...</code>)</strong> &mdash; Gets elements matching all supplied attributes.</p>
+<ul class="list">
+<li><code>attribute</code> (<code>String</code>, <em>Required</em>)<ul class="list">
+<li><strong>Note</strong>: <code>n</code> amount of attributes may be passed.</li>
+</ul>
+</li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">// Example 1: gets elements that HAVE a class attribute</span>
+query.attrs(<span class="hljs-string">"[class]"</span>);
 
-<span class="hljs-comment">// now we filter wanted elements...</span>
+<span class="hljs-comment">// Example 2: gets elements that DO NOT have a class attribute</span>
+query.attrs(<span class="hljs-string">"[!class]"</span>);
 
-<span class="hljs-comment">// example 1: gets elements that HAVE a class attribute</span>
-<span class="hljs-keyword">var</span> filtered = query.attrs(<span class="hljs-string">"[class]"</span>);
+<span class="hljs-comment">// Example 3: gets elements with a type attribute AND value equal to text</span>
+query.attrs(<span class="hljs-string">"[type=text]"</span>);</code></pre><p><a name="instance-methods-children"></a>
+➜ <strong>instance.children</strong> &mdash; Gets element&#39;s children.</p>
+<ul class="list">
+<li><strong>No Parameters</strong></li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code>query.children();</code></pre><p><a name="instance-methods-classes"></a>
+➜ <strong>instance.classes(<code>className</code>)</strong> &mdash; Gets elements matching any of the supplied classes.</p>
+<ul class="list">
+<li><code>className</code> (<code>String</code>, <em>Required</em>)<ul class="list">
+<li><strong>Note</strong>: <code>n</code> amount of classNames may be passed.</li>
+</ul>
+</li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">// Example 1: gets elements with the classes active &amp; nav-item</span>
+query.classes(<span class="hljs-string">"active"</span>, <span class="hljs-string">"nav-item"</span>);
 
-<span class="hljs-comment">// example 2: gets elements that DO NOT have a class attribute</span>
-<span class="hljs-keyword">var</span> filtered = query.attrs(<span class="hljs-string">"[!class]"</span>);
-<span class="hljs-comment">// **Note: not(!) only checks for absence of attribute</span>
-
-<span class="hljs-comment">// example 3: gets elements with a type attribute AND value equal to text</span>
-<span class="hljs-keyword">var</span> filtered = query.attrs(<span class="hljs-string">"[type=text]"</span>);</code></pre><p><strong>Funnel.children</strong> &mdash; Gets element&#39;s children.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside"</span>);
-<span class="hljs-comment">// get children</span>
-<span class="hljs-keyword">var</span> next = query.children();</code></pre><p><strong>Funnel.classes</strong> &mdash; Gets elements matching any of the supplied classes.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get all elements contained in aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside:all"</span>);
-
-<span class="hljs-comment">// example 1: gets elements with the classes active &amp; nav-item</span>
-<span class="hljs-keyword">var</span> filtered = query.classes(<span class="hljs-string">"active"</span>, <span class="hljs-string">"nav-item"</span>);
-
-<span class="hljs-comment">// example 2: gets everything bu elements with the classes active and nav-item</span>
-<span class="hljs-keyword">var</span> filtered = query.classes(<span class="hljs-string">"!active"</span>, <span class="hljs-string">"!nav-item"</span>);</code></pre><p><strong>Funnel.form</strong> &mdash; Selector.attr shorthand.
+<span class="hljs-comment">// Example 2: gets everything but elements with the classes active and nav-item</span>
+query.classes(<span class="hljs-string">"!active"</span>, <span class="hljs-string">"!nav-item"</span>);</code></pre><p><a name="instance-methods-form"></a>
+➜ <strong>instance.form(<code>inputType</code>)</strong> &mdash; Selector.attr shorthand.
 (List of possible input types <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input">here</a> and <a href="http://www.w3schools.com/TAGS/att_input_type.asp">here</a>)</p>
-<pre class="hljs"><code><span class="hljs-comment">// get all elements contained in aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside:all"</span>);
-
-<span class="hljs-comment">// example 1: gets elements that have a type attribute and value text =&gt; [type=text]</span>
-<span class="hljs-keyword">var</span> filtered = query.form(<span class="hljs-string">":text"</span>);
+<ul class="list">
+<li><code>inputType</code> (<code>String</code>, <em>Required</em>)<ul class="list">
+<li><strong>Note</strong>: <code>n</code> amount of inputTypes may be passed.</li>
+</ul>
+</li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">// Example 1: gets elements that have a type attribute and value text =&gt; [type=text]</span>
+query.form(<span class="hljs-string">":text"</span>);
 <span class="hljs-comment">// shorthand for...</span>
-<span class="hljs-keyword">var</span> filtered = query.attrs(<span class="hljs-string">"[type=text]"</span>);</code></pre><p><strong>Funnel.next</strong> &mdash; Gets the next element sibling of elements in last stack.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside1"</span>);
-<span class="hljs-comment">// get sibling to the right</span>
-<span class="hljs-keyword">var</span> next = query.next(); <span class="hljs-comment">// i.e. #aside2</span>
-<span class="hljs-comment">// **Note: if no element exists null is substituted</span></code></pre><p><strong>Funnel.only</strong> &mdash; Filters out any element not in provided indices.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get all elements contained in aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside:all"</span>);
-<span class="hljs-comment">// only gets elements at indices 0, 1, 2 or the first 3 elements</span>
-<span class="hljs-keyword">var</span> filtered = query.only([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]);</code></pre><p><strong>Funnel.parent</strong> &mdash; Gets element&#39;s parent.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside"</span>);
-<span class="hljs-comment">// get parent</span>
-<span class="hljs-keyword">var</span> next = query.parent();</code></pre><p><strong>Funnel.parents</strong> &mdash; Gets element&#39;s parents.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside"</span>);
-<span class="hljs-comment">// get parents</span>
-<span class="hljs-keyword">var</span> next = query.parents();</code></pre><p><strong>Funnel.prev</strong> &mdash; Gets the previous element sibling of elements in last stack.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside1"</span>);
-<span class="hljs-comment">// get sibling to the right</span>
-<span class="hljs-keyword">var</span> prev = query.prev(); <span class="hljs-comment">// i.e. #aside0</span>
-<span class="hljs-comment">// **Note: if no element exists null is substituted</span></code></pre><p><strong>Funnel.range</strong> &mdash; Gets elements at specified indice range.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get all elements contained in aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside:all"</span>);
+query.attrs(<span class="hljs-string">"[type=text]"</span>);</code></pre><p><a name="instance-methods-next"></a>
+➜ <strong>instance.next</strong> &mdash; Gets the next element sibling of elements in last stack.</p>
+<ul class="list">
+<li><strong>No Parameters</strong></li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<p><strong>Note</strong>: If no element exists <code>null</code> is returned.</p>
+<pre class="hljs"><code>f(<span class="hljs-string">"#aside1"</span>).next(); <span class="hljs-comment">// &lt;#aside2&gt;</span></code></pre><p><a name="instance-methods-only"></a>
+➜ <strong>instance.only(<code>indices</code>)</strong> &mdash; Filters out any element not in provided indices.</p>
+<ul class="list">
+<li><code>indices</code> (<code>Array</code>, <em>Required</em>)</li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code>query.only([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]); <span class="hljs-comment">// elements at indices 0-2 (first 3 elements)</span></code></pre><p><a name="instance-methods-parent"></a>
+➜ <strong>instance.parent</strong> &mdash; Gets element&#39;s parent.</p>
+<ul class="list">
+<li><strong>No Parameters</strong></li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code>query.parent();</code></pre><p><a name="instance-methods-parents"></a>
+➜ <strong>instance.parents</strong> &mdash; Gets element&#39;s parents.</p>
+<ul class="list">
+<li><strong>No Parameters</strong></li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code>query.parents();</code></pre><p><a name="instance-methods-prev"></a>
+➜ <strong>instance.prev</strong> &mdash; Gets the previous element sibling of elements in last stack.</p>
+<ul class="list">
+<li><strong>No Parameters</strong></li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<p><strong>Note</strong>: If no element exists <code>null</code> is returned.</p>
+<pre class="hljs"><code>f(<span class="hljs-string">"#aside1"</span>).prev(); <span class="hljs-comment">// &lt;#aside0&gt;</span></code></pre><p><a name="instance-methods-range"></a>
+➜ <strong>instance.range(<code>range</code>)</strong> &mdash; Gets elements at specified indice range.</p>
+<ul class="list">
+<li><code>range</code> (<code>Array</code>, <em>Required</em>)<ul class="list">
+<li><code>0</code> (<code>Number</code>, <em>Default</em>: 0) <code>start_index</code>: Where to start range.</li>
+<li><code>1</code> (<code>Number</code>, <em>Default</em>: -1) <code>end_index</code>: Where to end range.<ul class="list">
+<li><code>-1</code> means to stop and include the last element. Essentially use the length of the array.</li>
+</ul>
+</li>
+<li><code>2</code> (<code>Number</code>, <em>Default</em>: 1) <code>step</code>: Increase step by.</li>
+</ul>
+</li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code>query.range([<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>]); <span class="hljs-comment">// even   </span>
+query.range([<span class="hljs-number">1</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>]); <span class="hljs-comment">// odd    </span>
+query.range([<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">1</span>]); <span class="hljs-comment">// entire </span>
+query.range([<span class="hljs-number">0</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>]);  <span class="hljs-comment">// &lt; 3    </span>
+query.range([<span class="hljs-number">4</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">1</span>]); <span class="hljs-comment">// &gt; 4    </span>
+query.range([<span class="hljs-number">0</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>]);  <span class="hljs-comment">// first 5 elements</span></code></pre><p><a name="instance-methods-siblings"></a>
+➜ <strong>instance.siblings</strong> &mdash; Gets siblings of elements.</p>
+<ul class="list">
+<li><strong>No Parameters</strong></li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code>query.siblings();</code></pre><p><a name="instance-methods-skip"></a>
+➜ <strong>instance.skip(<code>indices</code>)</strong> &mdash; Filters out element at provided indices.</p>
+<ul class="list">
+<li><code>indices</code> (<code>Array</code>, <em>Required</em>) Indices to skip.</li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code>query.skip([<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>]); <span class="hljs-comment">// filter out the first and last elements</span></code></pre><p><a name="instance-methods-state"></a>
+➜ <strong>instance.state(<code>stateType</code>, <code>state</code>)</strong> &mdash; Gets elements with supplied state.</p>
+<ul class="list">
+<li><code>stateType</code> (<code>String</code>, <em>Required</em>)<ul class="list">
+<li>Possible states:<ul class="list">
+<li><code>checked</code> </li>
+<li><code>selected</code> </li>
+<li><code>disabled</code> </li>
+<li><code>visible</code></li>
+<li><code>empty</code> (no elements or text nodes).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>state</code> (<code>Boolean</code>, <em>Required</em>)</li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">// Example 1: gets checked input elements</span>
+query.state(<span class="hljs-string">"checked"</span>, <span class="hljs-literal">true</span>);
 
-<span class="hljs-comment">// range format --&gt; [start_index, end_index, step]</span>
-<span class="hljs-comment">// **Note: an end_index of -1 signals to use length of array</span>
+<span class="hljs-comment">// Example 2: gets nonchecked input elements</span>
+query.state(<span class="hljs-string">"checked"</span>, <span class="hljs-literal">false</span>);</code></pre><p><a name="instance-methods-tags"></a>
+➜ <strong>instance.tags(<code>tag</code>, <code>tagN...</code>)</strong> &mdash; Gets elements matching any of the supplied tag types.</p>
+<ul class="list">
+<li><code>tag</code> (<code>String</code>, <em>Required</em>)<ul class="list">
+<li><strong>Note</strong>: <code>n</code> amount of tags may be passed.</li>
+</ul>
+</li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">// Example 1: gets elements of type input or canvas</span>
+query.tags(<span class="hljs-string">"input"</span>, <span class="hljs-string">"canvas"</span>);
 
-<span class="hljs-comment">// even   range --&gt; [0, -1, 2]</span>
-<span class="hljs-comment">// odd    range --&gt; [1, -1, 2]</span>
-<span class="hljs-comment">// entire range --&gt; [0, -1, 1]</span>
-<span class="hljs-comment">// &lt; 3    range --&gt; [0, 3, 1]</span>
-<span class="hljs-comment">// &gt; 4    range --&gt; [4, -1, 1]</span>
-
-<span class="hljs-comment">// example 1</span>
-<span class="hljs-keyword">var</span> filtered = query.range([<span class="hljs-number">0</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>]); <span class="hljs-comment">// gets first 5 elements</span></code></pre><p><strong>Funnel.siblings</strong> &mdash; Gets siblings of elements.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside"</span>);
-<span class="hljs-comment">// get siblings</span>
-<span class="hljs-keyword">var</span> next = query.siblings();</code></pre><p><strong>Funnel.skip</strong> &mdash; Filters out element at provided indices.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get all elements contained in aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside:all"</span>);
-<span class="hljs-comment">// filter out the first and last elements</span>
-<span class="hljs-keyword">var</span> filtered = query.skip([<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>]);</code></pre><p><strong>Funnel.state</strong> &mdash; Gets elements with supplied state.</p>
-<p>Possible states include <code>checked</code>, <code>selected</code>, <code>disabled</code>, <code>visible</code>, and <code>empty</code> (no elements or text nodes).</p>
-<pre class="hljs"><code><span class="hljs-comment">// get all input elements of type checkbox contained in aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside:all"</span>).tags(<span class="hljs-string">"input"</span>).attrs(<span class="hljs-string">"[type=checkbox]"</span>);
-
-<span class="hljs-comment">// example 1: gets checked elements</span>
-<span class="hljs-keyword">var</span> checked = query.state(<span class="hljs-string">"checked"</span>, <span class="hljs-literal">true</span>);
-
-<span class="hljs-comment">// example 2: gets nonchecked elements</span>
-<span class="hljs-keyword">var</span> nonchecked = query.state(<span class="hljs-string">"checked"</span>, <span class="hljs-literal">false</span>);</code></pre><p><strong>Funnel.tags</strong> &mdash; Gets elements matching any of the supplied tag types.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get all elements contained in aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside:all"</span>);
-
-<span class="hljs-comment">// example 1: gets elements of type input or canvas</span>
-<span class="hljs-keyword">var</span> filtered = query.tags(<span class="hljs-string">"input"</span>, <span class="hljs-string">"canvas"</span>);
-
-<span class="hljs-comment">// example 2: gets everything BUT input or canvas elements</span>
-<span class="hljs-keyword">var</span> filtered = query.tags(<span class="hljs-string">"!input"</span>, <span class="hljs-string">"!canvas"</span>);</code></pre><p><strong>Funnel.textNodes</strong> &mdash; Gets the text nodes of elements in last stack.</p>
-<pre class="hljs"><code><span class="hljs-comment">// get all elements contained in aside element</span>
-<span class="hljs-keyword">var</span> query = f(<span class="hljs-string">"#aside:all"</span>);
-<span class="hljs-comment">// filter all aside elements to get text nodes</span>
-<span class="hljs-keyword">var</span> text_nodes = query.textNodes();</code></pre><p><a name="usage"></a></p>
-<h3 id="usage">Usage</h3>
-<p><a name="getting-elements"></a></p>
-<h3 id="getting-elements">Getting Elements</h3>
-<p><strong>Funnel.getStack</strong> &mdash; Returns the last element stack for use.</p>
-<pre class="hljs"><code><span class="hljs-comment">// The index is optional. Omitting it will return the last element stack.</span>
-<span class="hljs-comment">// However, if a previous stack is needed provide the index of the stack</span>
-<span class="hljs-comment">// to return. </span>
-query.getStack([?index]);
-
-<span class="hljs-comment">// **Note: The initial elements that are passed to the Funnel() function make</span>
-<span class="hljs-comment">// up the first stack. Each method (filter) used after that will create an </span>
-<span class="hljs-comment">// additional stack.</span>
-<span class="hljs-comment">// For example:</span>
-f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>) <span class="hljs-comment">// first stack  (index:0) --&gt; ["&lt;#red&gt;", "&lt;#green&gt;"]</span>
- .attrs(<span class="hljs-string">"[id=red]"</span>) <span class="hljs-comment">// second stack (index:1) --&gt; ["&lt;#red&gt;"]</span>
-<span class="hljs-comment">// ...so...</span>
-f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).attrs(<span class="hljs-string">"[id=red]"</span>).getStack() <span class="hljs-comment">// will return --&gt; ["&lt;#red&gt;"]</span></code></pre><p><strong>Funnel.getElement</strong> &mdash; Returns the first element of the last stack.</p>
-<pre class="hljs"><code><span class="hljs-comment">// The index is optional. Omitting it will return the first element of the </span>
-<span class="hljs-comment">// last element stack. Providing an index will return the element at that index.</span>
-query.getElement([?index]);
-
-<span class="hljs-comment">// For example:</span>
-f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).getElement()  <span class="hljs-comment">// will return --&gt; &lt;#red&gt;</span>
+<span class="hljs-comment">// Example 2: gets everything BUT input or canvas elements</span>
+query.tags(<span class="hljs-string">"!input"</span>, <span class="hljs-string">"!canvas"</span>);</code></pre><p><a name="instance-methods-textnodes"></a>
+➜ <strong>instance.textNodes</strong> &mdash; Gets the text nodes of elements in last stack.</p>
+<ul class="list">
+<li><strong>No Parameters</strong></li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code>query.textNodes(); <span class="hljs-comment">// filter all aside elements to get text nodes</span></code></pre><p><a name="instance-methods-getstack"></a>
+➜ <strong>instance.getStack(<code>index</code>)</strong> &mdash; Return the last element stack for use.</p>
+<ul class="list">
+<li><code>index</code> (<code>Number</code>, <em>Optional</em>, <em>Default</em>: <code>0</code>) Index stack to return.<ul class="list">
+<li>The index is optional. Omitting it will return the last element stack. However, if a previous stack is needed provide the index of the stack to return.</li>
+</ul>
+</li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code>query.getStack(); <span class="hljs-comment">// use elements for whatever...</span></code></pre><p><a name="instance-methods-getelement"></a>
+➜ <strong>instance.getElement(<code>index</code>)</strong> &mdash; Return the first element of the last stack for use.</p>
+<ul class="list">
+<li><code>index</code> (<code>Number</code>, <em>Optional</em>, <em>Default</em>: <code>0</code>) Index of element in stack to return.<ul class="list">
+<li>The index is optional. Omitting it will return the first element of the last element stack. Providing an index will return the element at that index.</li>
+</ul>
+</li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).getElement()  <span class="hljs-comment">// will return --&gt; &lt;#red&gt;</span>
 f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).getElement(<span class="hljs-number">0</span>) <span class="hljs-comment">// will return --&gt; &lt;#red&gt;</span>
-f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).getElement(<span class="hljs-number">1</span>) <span class="hljs-comment">// will return --&gt; &lt;#green&gt;</span></code></pre><p><strong>Funnel.concat</strong> &mdash; Combines element stacks.<br><strong>Funnel.iterable</strong> &mdash; Property indicating whether the last element stack contains elements.</p>
+f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</span>).getElement(<span class="hljs-number">1</span>) <span class="hljs-comment">// will return --&gt; &lt;#green&gt;</span></code></pre><p><a name="instance-methods-concat"></a>
+➜ <strong>instance.concat(<code>stack</code>)</strong> &mdash; Combines two stacks into one.</p>
+<ul class="list">
+<li><code>stack</code> (<code>ElementStack</code>, <em>Required</em>) </li>
+<li><strong>Returns</strong> instance.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> sidebar = f(<span class="hljs-string">"#sidebar"</span>);
+<span class="hljs-keyword">var</span> container = f(<span class="hljs-string">"#container"</span>);
+<span class="hljs-keyword">var</span> elements = sidebar.concat(container); <span class="hljs-comment">// combined element collection</span></code></pre><p><a name="instance-methods-iterable"></a>
+➜ <strong>instance.iterable</strong> &mdash; Property indicating whether the last element stack contains elements.</p>
+<ul class="list">
+<li><strong>No Parameters</strong></li>
+<li><strong>Returns</strong> Nothing.</li>
+</ul>
 <pre class="hljs"><code><span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">"click"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
 
     <span class="hljs-comment">// cache the target element</span>
@@ -367,9 +394,12 @@ f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</s
         <span class="hljs-comment">// do something with delegate...</span>
     }
 
-}, <span class="hljs-literal">false</span>);</code></pre><p><a name="element-filtering"></a></p>
+}, <span class="hljs-literal">false</span>);</code></pre><p><a name="usage"></a></p>
+<h3 id="usage">Usage</h3>
+<p><a name="element-filtering"></a></p>
 <h3 id="element-filtering">Element Filtering</h3>
-<p><strong>Normal Filtering</strong> &mdash; If <code>HTMLElements</code> are provided to FunnelJS, its methods can be used to filter
+<p><a name="filtering-general"></a>
+<strong>General Filtering</strong> &mdash; If <code>HTMLElements</code> are provided to FunnelJS, its methods can be used to filter
 the said elements. This is very handy when using event delegation.</p>
 <pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"cont"</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span>&gt;</span>
@@ -380,8 +410,8 @@ the said elements. This is very handy when using event delegation.</p>
 <span class="hljs-keyword">var</span> $cont = f(<span class="hljs-string">"#cont"</span>).getElement();
 <span class="hljs-comment">// using the $cont element get all its ancestors and return </span>
 <span class="hljs-comment">// the ancestors that have the attribute type set to text</span>
-<span class="hljs-keyword">var</span> text_inputs = f($cont).all().attrs(<span class="hljs-string">"[type=text]"</span>).getStack();</code></pre><p><strong>Event Delegation Filtering</strong> &mdash; Filtering can also be very handy when
-using event delegation.</p>
+<span class="hljs-keyword">var</span> text_inputs = f($cont).all().attrs(<span class="hljs-string">"[type=text]"</span>).getStack();</code></pre><p><a name="filtering-event-delegation"></a>
+<strong>Event Delegation Filtering</strong> &mdash; Filtering for event delegation is also made easy.</p>
 <pre class="hljs"><code><span class="hljs-comment">// click event listener</span>
 <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">"click"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
 
@@ -390,12 +420,11 @@ using event delegation.</p>
     <span class="hljs-comment">// filter element to see if it's the element we want</span>
     <span class="hljs-keyword">var</span> filtered = f(target).attrs(<span class="hljs-string">"[id=cont]"</span>).getElement();
 
-    <span class="hljs-keyword">if</span> (filtered) {
-        <span class="hljs-comment">// handler logic</span>
+    <span class="hljs-keyword">if</span> (filtered) { <span class="hljs-comment">// handler logic</span>
         <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Target element clicked! :)"</span>);
     }  <span class="hljs-comment">// else ignore click </span>
 
-});</code></pre><p><a name="contributing"></a></p>
+}, <span class="hljs-literal">false</span>);</code></pre><p><a name="contributing"></a></p>
 <h3 id="contributing">Contributing</h3>
 <p>Contributions are welcome! Found a bug, feel like documentation is lacking/confusing and needs an update, have performance/feature suggestions or simply found a typo? Let me know! :)</p>
 <p>See how to contribute <a href="https://github.com/cgabriel5/funneljs/blob/master/CONTRIBUTING.md">here</a>.</p>
