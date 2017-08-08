@@ -11,8 +11,23 @@ Simple, standalone, lightweight JavaScript selector engine.
 - [API](#api)
     - [Instance](#instance-api)
 - [Usage](#usage)
-    - [General Filtering](#filtering-general)
-    - [Event Delegation Filtering](#filtering-event-delegation)
+    - [Examples](#usage-examples)
+        - [Only Source Points](#example-only-source-points)
+        - [Exclude Class](#example-exclude-class)
+        - [Input State (`checked`)](#example-input-state-1)
+        - [Input State (`checked`, `hidden`)](#example-input-state-2)
+        - [Input State (`checked`, `visible`)](#example-input-state-3)
+        - [Siblings](#example-siblings)
+        - [Parent](#example-parent)
+        - [Parents](#example-parents)
+        - [Tag Type Input](#example-tag-type-input)
+        - [Children](#example-children)
+        - [Attributes 1](#example-attributes-1)
+        - [Attributes 2](#example-attributes-1)
+        - [Multiple Tags](#example-multiple-tags)
+    - [Element Filtering](#element-filtering)
+        - [General Filtering](#filtering-general)
+        - [Event Delegation Filtering](#filtering-event-delegation)
 - [Contributing](#contributing)  
 - [License](#license)
 
@@ -196,17 +211,19 @@ var query = f("#aside").all();
 
 - `attribute` (`String`, _Required_)
     - **Note**: `n` amount of attributes may be passed.
+    - **Note**: Using brackets, or not, is fine. `[type=file]` or `type=file` is allowed. 
+    - **Note**: Using quotes is **not** allowed. `[type="file"]` or `[type='file']` is not allowed.
 - **Returns** instance.
 
 ```js
 // Example 1: gets elements that HAVE a class attribute
-query.attrs("[class]");
+query.attrs("[class]"); /* or */ query.attrs("class");
 
 // Example 2: gets elements that DO NOT have a class attribute
-query.attrs("[!class]");
+query.attrs("[!class]"); /* or */ query.attrs("!class");
 
 // Example 3: gets elements with a type attribute AND value equal to text
-query.attrs("[type=text]");
+query.attrs("[type=text]"); /* or */ query.attrs("type=text");
 ```
 
 <a name="instance-methods-children"></a>
@@ -474,6 +491,164 @@ document.addEventListener("click", function(e) {
 
 <a name="usage"></a>
 ### Usage
+
+For a better understanding check out `index.html` and `js/source/test.js`. `js/source/test.js` contains the following examples.
+
+**Note**: The following are just examples and is not an exhaustive list.
+
+<a name="usage-examples"></a>
+### Examples
+
+<a name="example-only-source-points"></a>
+**Only Source Points** &mdash; Equivalent to `getElementById`.
+
+- Uses the elements with id `tape` and `file` as source points.
+- No filters are applied. Therefore invoking `getStack` will only return the provided source elements
+
+```js
+f("#tape", "#file").getStack();
+```
+
+<a name="example-exclude-class"></a>
+**Exclude Class** &mdash; Everything but provided class.
+
+- Uses the element with id `tape` as a source point. Using `:all` gets ALL the elements descendants rather than the element itself.
+- Of the descendants filter out any that contain the class `active`.
+- Return the collection for use with `getStack`.
+
+```js
+f("#red:all").classes("!active").getStack();
+```
+
+<a name="example-input-state-1"></a>
+**Input State (`checked`)** &mdash; Only get non-checked checkboxes.
+
+- Uses the element with id `tape` as a source point. Using `:all` gets ALL the elements descendants rather than the element itself.
+- Get form type elements of the type checkbox.
+- `state`, in this case, will only return non checked elements.
+- Return the collection for use with `getStack`.
+
+```js
+f("#red:all").form(":checkbox").state("checked", false).getStack();
+```
+
+<a name="example-input-state-2"></a>
+**Input State (`checked`, `hidden`)** &mdash; Only get non-checked and hidden checkboxes.
+
+- Uses the element with id `tape` as a source point. Using `:all` gets ALL the elements descendants rather than the element itself.
+- Get form type elements of the type checkbox.
+- `state`, in this case, will only return non checked elements.
+- `state`, in this case, will only return non visible elements.
+- Return the collection for use with `getStack`.
+
+```js
+f("#red:all").form(":checkbox").state("checked", false).state("visible", false).getStack();
+```
+
+<a name="example-input-state-3"></a>
+**Input State (`checked`, `visible`)** &mdash; Only get non-checked and visible checkboxes.
+
+- Uses the element with id `tape` as a source point. Using `:all` gets ALL the elements descendants rather than the element itself.
+- Get form type elements of the type checkbox.
+- `state`, in this case, will only return non checked elements.
+- `state`, in this case, will only return visible elements.
+- Return the collection for use with `getStack`.
+
+```js
+f("#red:all").form(":checkbox").state("checked", false).state("visible", true).getStack();
+```
+
+<a name="example-siblings"></a>
+**Siblings** &mdash; Get element's siblings.
+
+- Uses the element with id `pink` as a source point.
+- Get the source point elements siblings.
+- Return the collection for use with `getStack`.
+
+```js
+f("#pink").siblings().getStack();
+```
+
+<a name="example-parent"></a>
+**Parent** &mdash; Get element's parent element.
+
+- Uses the element with id `red` as a source point.
+- Get the source points parent.
+- Return the collection for use with `getStack`.
+
+```js
+f("#red").parent().getStack();
+```
+
+<a name="example-parents"></a>
+**Parents** &mdash; Get element's parents.
+
+- Uses the element with id `red` as a source point.
+- Get the source points parents.
+- Return the collection for use with `getStack`.
+
+```js
+f("#red").parents().getStack();
+```
+
+<a name="example-tag-type-input"></a>
+**Tag Type Input** &mdash; Get elements of the tag type input.
+
+- Uses the element with id `tape` as a source point. Using `:all` gets ALL the elements descendants rather than the element itself.
+- Use the `tag` filter to return elements of tag-type `input`.
+- Return the collection for use with `getStack`.
+
+```js
+f("#red:all").tags("input").getStack();
+```
+
+<a name="example-children"></a>
+**Children** &mdash; Get element's children element.
+
+- Uses the element with id `tape` as a source point. Using `:all` gets ALL the elements descendants rather than the element itself.
+- Use the `tag` filter to return elements of tag-type `form`.
+- Get the children of the collection.
+- Return the collection for use with `getStack`.
+
+```js
+f("#red:all").tags("form").children().getStack();
+```
+
+<a name="example-attributes-1"></a>
+**Attributes 1** &mdash; Showcase attribute usage.
+
+- Uses the element with id `tape` as a source point. Using `:all` gets ALL the elements descendants rather than the element itself.
+- Get the children of the collection.
+- Use the `attrs` filter to return elements with the attribute `type=file`.
+- Return the collection for use with `getStack`.
+
+```js
+f("#red:all").children().attrs("[type=file]").getStack();
+```
+
+<a name="example-attributes-2"></a>
+**Attributes 2** &mdash; Get element that have the `class` attribute.
+
+- Uses the element with id `tape` as a source point. Using `:all` gets ALL the elements descendants rather than the element itself.
+- Get the children of the collection.
+- Use the `attrs` filter to return elements with the attribute `class` (the attribute value in this query is not checked, simply checks if the element HAS the attribute).
+- Return the collection for use with `getStack`.
+
+```js
+f("#red:all").children().attrs("[class]").getStack();
+```
+
+<a name="example-multiple-tags"></a>
+**Multiple Tags** &mdash; Get elements that are of tag type `input` or `canvas`.
+
+- Uses the element with id `tape` as a source point. Using `:all` gets ALL the elements descendants rather than the element itself.
+- Get the children of the collection.
+- Use the `tag` filter to return elements of tag-type `input` or `canvas`.
+- Return the collection for use with `getStack`.
+
+```js
+f("#red:all").children().tags("input", "canvas").getStack();
+```
 
 <a name="element-filtering"></a>
 ### Element Filtering

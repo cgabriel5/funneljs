@@ -24,8 +24,27 @@
 </ul>
 </li>
 <li><a href="#usage">Usage</a><ul class="list">
+<li><a href="#usage-examples">Examples</a><ul class="list">
+<li><a href="#example-only-source-points">Only Source Points</a></li>
+<li><a href="#example-exclude-class">Exclude Class</a></li>
+<li><a href="#example-input-state-1">Input State (<code>checked</code>)</a></li>
+<li><a href="#example-input-state-2">Input State (<code>checked</code>, <code>hidden</code>)</a></li>
+<li><a href="#example-input-state-3">Input State (<code>checked</code>, <code>visible</code>)</a></li>
+<li><a href="#example-siblings">Siblings</a></li>
+<li><a href="#example-parent">Parent</a></li>
+<li><a href="#example-parents">Parents</a></li>
+<li><a href="#example-tag-type-input">Tag Type Input</a></li>
+<li><a href="#example-children">Children</a></li>
+<li><a href="#example-attributes-1">Attributes 1</a></li>
+<li><a href="#example-attributes-1">Attributes 2</a></li>
+<li><a href="#example-multiple-tags">Multiple Tags</a></li>
+</ul>
+</li>
+<li><a href="#element-filtering">Element Filtering</a><ul class="list">
 <li><a href="#filtering-general">General Filtering</a></li>
 <li><a href="#filtering-event-delegation">Event Delegation Filtering</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#contributing">Contributing</a>  </li>
@@ -177,18 +196,20 @@ f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</s
 <ul class="list">
 <li><code>attribute</code> (<code>String</code>, <em>Required</em>)<ul class="list">
 <li><strong>Note</strong>: <code>n</code> amount of attributes may be passed.</li>
+<li><strong>Note</strong>: Using brackets, or not, is fine. <code>[type=file]</code> or <code>type=file</code> is allowed. </li>
+<li><strong>Note</strong>: Using quotes is <strong>not</strong> allowed. <code>[type=&quot;file&quot;]</code> or <code>[type=&#39;file&#39;]</code> is not allowed.</li>
 </ul>
 </li>
 <li><strong>Returns</strong> instance.</li>
 </ul>
 <pre class="hljs"><code><span class="hljs-comment">// Example 1: gets elements that HAVE a class attribute</span>
-query.attrs(<span class="hljs-string">"[class]"</span>);
+query.attrs(<span class="hljs-string">"[class]"</span>); <span class="hljs-comment">/* or */</span> query.attrs(<span class="hljs-string">"class"</span>);
 
 <span class="hljs-comment">// Example 2: gets elements that DO NOT have a class attribute</span>
-query.attrs(<span class="hljs-string">"[!class]"</span>);
+query.attrs(<span class="hljs-string">"[!class]"</span>); <span class="hljs-comment">/* or */</span> query.attrs(<span class="hljs-string">"!class"</span>);
 
 <span class="hljs-comment">// Example 3: gets elements with a type attribute AND value equal to text</span>
-query.attrs(<span class="hljs-string">"[type=text]"</span>);</code></pre><p><a name="instance-methods-children"></a>
+query.attrs(<span class="hljs-string">"[type=text]"</span>); <span class="hljs-comment">/* or */</span> query.attrs(<span class="hljs-string">"type=text"</span>);</code></pre><p><a name="instance-methods-children"></a>
 ➜ <strong>instance.children</strong> &mdash; Gets element&#39;s children.</p>
 <ul class="list">
 <li><strong>No Parameters</strong></li>
@@ -396,7 +417,110 @@ f(<span class="hljs-string">"#red"</span>, <span class="hljs-string">"#green"</s
 
 }, <span class="hljs-literal">false</span>);</code></pre><p><a name="usage"></a></p>
 <h3 id="usage">Usage</h3>
-<p><a name="element-filtering"></a></p>
+<p>For a better understanding check out <code>index.html</code> and <code>js/source/test.js</code>. <code>js/source/test.js</code> contains the following examples.</p>
+<p><strong>Note</strong>: The following are just examples and is not an exhaustive list.</p>
+<p><a name="usage-examples"></a></p>
+<h3 id="examples">Examples</h3>
+<p><a name="example-only-source-points"></a>
+<strong>Only Source Points</strong> &mdash; Equivalent to <code>getElementById</code>.</p>
+<ul class="list">
+<li>Uses the elements with id <code>tape</code> and <code>file</code> as source points.</li>
+<li>No filters are applied. Therefore invoking <code>getStack</code> will only return the provided source elements</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#tape"</span>, <span class="hljs-string">"#file"</span>).getStack();</code></pre><p><a name="example-exclude-class"></a>
+<strong>Exclude Class</strong> &mdash; Everything but provided class.</p>
+<ul class="list">
+<li>Uses the element with id <code>tape</code> as a source point. Using <code>:all</code> gets ALL the elements descendants rather than the element itself.</li>
+<li>Of the descendants filter out any that contain the class <code>active</code>.</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red:all"</span>).classes(<span class="hljs-string">"!active"</span>).getStack();</code></pre><p><a name="example-input-state-1"></a>
+<strong>Input State (<code>checked</code>)</strong> &mdash; Only get non-checked checkboxes.</p>
+<ul class="list">
+<li>Uses the element with id <code>tape</code> as a source point. Using <code>:all</code> gets ALL the elements descendants rather than the element itself.</li>
+<li>Get form type elements of the type checkbox.</li>
+<li><code>state</code>, in this case, will only return non checked elements.</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red:all"</span>).form(<span class="hljs-string">":checkbox"</span>).state(<span class="hljs-string">"checked"</span>, <span class="hljs-literal">false</span>).getStack();</code></pre><p><a name="example-input-state-2"></a>
+<strong>Input State (<code>checked</code>, <code>hidden</code>)</strong> &mdash; Only get non-checked and hidden checkboxes.</p>
+<ul class="list">
+<li>Uses the element with id <code>tape</code> as a source point. Using <code>:all</code> gets ALL the elements descendants rather than the element itself.</li>
+<li>Get form type elements of the type checkbox.</li>
+<li><code>state</code>, in this case, will only return non checked elements.</li>
+<li><code>state</code>, in this case, will only return non visible elements.</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red:all"</span>).form(<span class="hljs-string">":checkbox"</span>).state(<span class="hljs-string">"checked"</span>, <span class="hljs-literal">false</span>).state(<span class="hljs-string">"visible"</span>, <span class="hljs-literal">false</span>).getStack();</code></pre><p><a name="example-input-state-3"></a>
+<strong>Input State (<code>checked</code>, <code>visible</code>)</strong> &mdash; Only get non-checked and visible checkboxes.</p>
+<ul class="list">
+<li>Uses the element with id <code>tape</code> as a source point. Using <code>:all</code> gets ALL the elements descendants rather than the element itself.</li>
+<li>Get form type elements of the type checkbox.</li>
+<li><code>state</code>, in this case, will only return non checked elements.</li>
+<li><code>state</code>, in this case, will only return visible elements.</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red:all"</span>).form(<span class="hljs-string">":checkbox"</span>).state(<span class="hljs-string">"checked"</span>, <span class="hljs-literal">false</span>).state(<span class="hljs-string">"visible"</span>, <span class="hljs-literal">true</span>).getStack();</code></pre><p><a name="example-siblings"></a>
+<strong>Siblings</strong> &mdash; Get element&#39;s siblings.</p>
+<ul class="list">
+<li>Uses the element with id <code>pink</code> as a source point.</li>
+<li>Get the source point elements siblings.</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#pink"</span>).siblings().getStack();</code></pre><p><a name="example-parent"></a>
+<strong>Parent</strong> &mdash; Get element&#39;s parent element.</p>
+<ul class="list">
+<li>Uses the element with id <code>red</code> as a source point.</li>
+<li>Get the source points parent.</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red"</span>).parent().getStack();</code></pre><p><a name="example-parents"></a>
+<strong>Parents</strong> &mdash; Get element&#39;s parents.</p>
+<ul class="list">
+<li>Uses the element with id <code>red</code> as a source point.</li>
+<li>Get the source points parents.</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red"</span>).parents().getStack();</code></pre><p><a name="example-tag-type-input"></a>
+<strong>Tag Type Input</strong> &mdash; Get elements of the tag type input.</p>
+<ul class="list">
+<li>Uses the element with id <code>tape</code> as a source point. Using <code>:all</code> gets ALL the elements descendants rather than the element itself.</li>
+<li>Use the <code>tag</code> filter to return elements of tag-type <code>input</code>.</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red:all"</span>).tags(<span class="hljs-string">"input"</span>).getStack();</code></pre><p><a name="example-children"></a>
+<strong>Children</strong> &mdash; Get element&#39;s children element.</p>
+<ul class="list">
+<li>Uses the element with id <code>tape</code> as a source point. Using <code>:all</code> gets ALL the elements descendants rather than the element itself.</li>
+<li>Use the <code>tag</code> filter to return elements of tag-type <code>form</code>.</li>
+<li>Get the children of the collection.</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red:all"</span>).tags(<span class="hljs-string">"form"</span>).children().getStack();</code></pre><p><a name="example-attributes-1"></a>
+<strong>Attributes 1</strong> &mdash; Showcase attribute usage.</p>
+<ul class="list">
+<li>Uses the element with id <code>tape</code> as a source point. Using <code>:all</code> gets ALL the elements descendants rather than the element itself.</li>
+<li>Get the children of the collection.</li>
+<li>Use the <code>attrs</code> filter to return elements with the attribute <code>type=file</code>.</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red:all"</span>).children().attrs(<span class="hljs-string">"[type=file]"</span>).getStack();</code></pre><p><a name="example-attributes-2"></a>
+<strong>Attributes 2</strong> &mdash; Get element that have the <code>class</code> attribute.</p>
+<ul class="list">
+<li>Uses the element with id <code>tape</code> as a source point. Using <code>:all</code> gets ALL the elements descendants rather than the element itself.</li>
+<li>Get the children of the collection.</li>
+<li>Use the <code>attrs</code> filter to return elements with the attribute <code>class</code> (the attribute value in this query is not checked, simply checks if the element HAS the attribute).</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red:all"</span>).children().attrs(<span class="hljs-string">"[class]"</span>).getStack();</code></pre><p><a name="example-multiple-tags"></a>
+<strong>Multiple Tags</strong> &mdash; Get elements that are of tag type <code>input</code> or <code>canvas</code>.</p>
+<ul class="list">
+<li>Uses the element with id <code>tape</code> as a source point. Using <code>:all</code> gets ALL the elements descendants rather than the element itself.</li>
+<li>Get the children of the collection.</li>
+<li>Use the <code>tag</code> filter to return elements of tag-type <code>input</code> or <code>canvas</code>.</li>
+<li>Return the collection for use with <code>getStack</code>.</li>
+</ul>
+<pre class="hljs"><code>f(<span class="hljs-string">"#red:all"</span>).children().tags(<span class="hljs-string">"input"</span>, <span class="hljs-string">"canvas"</span>).getStack();</code></pre><p><a name="element-filtering"></a></p>
 <h3 id="element-filtering">Element Filtering</h3>
 <p><a name="filtering-general"></a>
 <strong>General Filtering</strong> &mdash; If <code>HTMLElements</code> are provided to FunnelJS, its methods can be used to filter
