@@ -12,22 +12,7 @@ Simple, standalone, lightweight JavaScript selector engine.
     - [Instance](#instance-api)
 - [Usage](#usage)
     - [Examples](#usage-examples)
-        - [Only Source Points](#example-only-source-points)
-        - [Exclude Class](#example-exclude-class)
-        - [Input State (`checked`)](#example-input-state-1)
-        - [Input State (`checked`, `hidden`)](#example-input-state-2)
-        - [Input State (`checked`, `visible`)](#example-input-state-3)
-        - [Siblings](#example-siblings)
-        - [Parent](#example-parent)
-        - [Parents](#example-parents)
-        - [Tag Type Input](#example-tag-type-input)
-        - [Children](#example-children)
-        - [Attributes 1](#example-attributes-1)
-        - [Attributes 2](#example-attributes-1)
-        - [Multiple Tags](#example-multiple-tags)
     - [Element Filtering](#element-filtering)
-        - [General Filtering](#filtering-general)
-        - [Event Delegation Filtering](#filtering-event-delegation)
 - [Contributing](#contributing)  
 - [License](#license)
 
@@ -68,14 +53,14 @@ funneljs works by using a broad collection of elements which are then subjected
 to filters to get/exclude elements.
 
 - General Overview:
-    - **Step 1** &mdash; Get elements from source points:
+    - **Step 1** &mdash; Get elements from [source points](#what-is-a-source-point):
         - `f("#source_point_id", "#source_point_id_N")`
     - **Step 2** &mdash; Chain filters to get/exclude elements:
         - `.filter1().filter2().filterN()`
     - **Step 3** &mdash; Finally, return element(s) via: 
         - `getStack` or `getElement`:
     - **Example** &mdash; `f("#aside:all").tags("span", "div").getStack();`
-    - **Explanation** &mdash; Query uses the element with the ID of `aside` as its source point. The inline `:all` means to grab _ALL_ its descendants. The `tags()` filter is then used on the elements collection to only get elements with the tags of `span` or `div`. Finally, the filtered collection is returned for use as an `Array` with `getStack()`.
+    - **Explanation** &mdash; Query uses the element with the id of `aside` as its source point. The inline `:all` means to grab _ALL_ its descendants. The `tags` filter is then used on the elements collection to only get elements with the tags of `span` or `div`. Finally, the filtered collection is returned for use as an `Array` via `getStack`.
 
 <a name="api"></a>
 ## API
@@ -84,7 +69,6 @@ to filters to get/exclude elements.
 ### API &mdash; Instance
 
 <a name="instance-methods-toc"></a>
-
 - [Instance](#instance-creation)
     - [What's A Source Point?](#what-is-a-source-point)
     - [Source Point Comparisons](#source-point-comparisons)
@@ -113,8 +97,9 @@ to filters to get/exclude elements.
 <a name="instance-creation"></a>
 ### Instance Creation
 
-- `sourcePoint` (`String|HTMLElement`, _Required_) The source point to use.
-    - **Note**: `n` amount of `sourcePoint`s may be passed.
+- `sourcePoint` (`String|HTMLElement`, _Required_) The source point(s) to use.
+    - **Note**: `n` amount of sourcePoints may be passed.
+    - **Note**: When providing a `String` _only_ element IDs are allowed.
 - **Returns** instance.
 
 **Note**: Using the `new` keyword is not necessary. The library will make sure to use it for when when you don't.
@@ -129,11 +114,7 @@ var query = Funnel("#container", "#sidebar");
 <a name="what-is-a-source-point"></a>
 ### What's A Source Point?
 
-A source point is just an element. This element is used to grab all its descendants
-to build the collection of elements wanted to filter. Querying the DOM is an
-expensive task as it searches the entire DOM for your wanted elements. Rather than
-search the entire DOM, this method pin-points its search on the descendants of selected source
-point elements.
+A source point is just an element. It represents the base or focal point from where to grab elements. When a `String` id or an `HTMLElement` is provided only those elements will be added to the element stack. It takes the use of `:all`, [either inline or the method](#instance-methods-all), to grab the source points' descendants. Only then can filters be applied to thin out the collection. Querying the DOM is expensive so rather than search the entire DOM this method pin-points its search on the descendants of the provided source point elements.
 
 <a name="source-point-comparisons"></a>
 ### Source Point Comparisons
@@ -175,7 +156,7 @@ document.getElementById("footer").getElementsByTagName("*");
 <a name="the-stack"></a>
 ### The Stack
 
-The initial elements that are passed to the `Funnel` instance make up the first stack. Each method (filter) used after that will create an additional element stack. Therefore, the `getStack` method will always return a stack, or element collection. By default it returns the last stack but can return any of the previous stacks. The `getElement` method will always return the _first_ element of the _last_ stack.
+The initial elements that are passed to the `Funnel` instance make up the first stack. Each filter used after that will create an additional element stack based on the last (most current) stack. Therefore, the `getStack` method will always return a stack, or element collection. By default it returns the last stack but can return any of the previous stacks, provided the index of the stack to return. The `getElement` method will always return the _first_ element of the _last_ stack.
 
 ```js
 // For example, the following contains 2 stacks...
@@ -194,7 +175,7 @@ f("#red", "#green").attrs("[id=red]").getStack()
 ### Instance Methods
 
 <a name="instance-methods-all"></a>
-➜ **instance.all** &mdash; Gets children and descendants of elements in last stack.
+➜ **instance.all** &mdash; Gets children and descendants of elements in the last stack.
 
 - **No Parameters**
 - **Returns** instance.
@@ -227,7 +208,7 @@ query.attrs("[type=text]"); /* or */ query.attrs("type=text");
 ```
 
 <a name="instance-methods-children"></a>
-➜ **instance.children** &mdash; Gets element's children.
+➜ **instance.children** &mdash; Gets the children of the elements in the last stack.
 
 - **No Parameters**
 - **Returns** instance.
@@ -252,11 +233,12 @@ query.classes("!active", "!nav-item");
 ```
 
 <a name="instance-methods-form"></a>
-➜ **instance.form(`inputType`)** &mdash; Selector.attr shorthand.
+➜ **instance.form(`inputType`)** &mdash; `instance.attr` shorthand.
 (List of possible input types [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input) and [here](http://www.w3schools.com/TAGS/att_input_type.asp))
 
 - `inputType` (`String`, _Required_)
     - **Note**: `n` amount of inputTypes may be passed.
+    - **Note**: `inputType` must be prefixed with a colon. 
 - **Returns** instance.
 
 ```js
@@ -272,7 +254,7 @@ query.attrs("[type=text]");
 - **No Parameters**
 - **Returns** instance.
 
-**Note**: If no element exists `null` is returned.
+**Note**: If no element exists `null` is substituted.
 
 ```js
 f("#aside1").next(); // <#aside2>
@@ -314,7 +296,7 @@ query.parents();
 - **No Parameters**
 - **Returns** instance.
 
-**Note**: If no element exists `null` is returned.
+**Note**: If no element exists `null` is substituted.
 
 ```js
 f("#aside1").prev(); // <#aside0>
@@ -324,19 +306,19 @@ f("#aside1").prev(); // <#aside0>
 ➜ **instance.range(`range`)** &mdash; Gets elements at specified indice range.
 
 - `range` (`Array`, _Required_)
-    - `0` (`Number`, _Default_: 0) `start_index`: Where to start range.
-    - `1` (`Number`, _Default_: -1) `end_index`: Where to end range.
-        - `-1` means to stop and include the last element. Essentially use the length of the array.
-    - `2` (`Number`, _Default_: 1) `step`: Increase step by.
+    - `0:start_index` (`Number`, _Default_: `0`) Where range should start.
+    - `1:end_index` (`Number`, _Default_: `-1`) Where range should end (_inclusive_).
+        - `-1` means to use the length of the array.
+    - `2:step` (`Number`, _Default_: `1`) Loop step.
 - **Returns** instance.
 
 ```js
-query.range([0, -1, 2]); // even   
-query.range([1, -1, 2]); // odd    
-query.range([0, -1, 1]); // entire 
-query.range([0, 3, 1]);  // < 3    
-query.range([4, -1, 1]); // > 4    
-query.range([0, 5, 1]);  // first 5 elements
+query.range([0, -1, 2]); // only even
+query.range([1, -1, 2]); // only odd
+query.range([0, -1, 1]); // all elements
+query.range([0, 3, 1]);  // first 4 elements (0, 1, 2, 3)
+query.range([4, -1, 1]); // from element 4 to last element
+query.range([0, 5, 1]);  // first 6 elements (0, 1, 2, 3, 4, 5)
 ```
 
 <a name="instance-methods-siblings"></a>
@@ -353,10 +335,11 @@ query.siblings();
 ➜ **instance.skip(`indices`)** &mdash; Filters out element at provided indices.
 
 - `indices` (`Array`, _Required_) Indices to skip.
+    - Providing `-1` as an indice means to exclude the last element.
 - **Returns** instance.
 
 ```js
-query.skip([0, -1]); // filter out the first and last elements
+query.skip([0, -1]); // exclude the first and last elements
 ```
 
 <a name="instance-methods-state"></a>
@@ -369,15 +352,15 @@ query.skip([0, -1]); // filter out the first and last elements
         - `selected` 
         - `disabled` 
         - `visible`
-        - `empty` (no elements or text nodes).
+        - `empty` (has no elements or text nodes).
 - `state` (`Boolean`, _Required_)
 - **Returns** instance.
 
 ```js
-// Example 1: gets checked input elements
+// Example 1: gets checked elements
 query.state("checked", true);
 
-// Example 2: gets nonchecked input elements
+// Example 2: gets nonchecked elements
 query.state("checked", false);
 ```
 
@@ -403,15 +386,15 @@ query.tags("!input", "!canvas");
 - **Returns** instance.
 
 ```js
-query.textNodes(); // filter all aside elements to get text nodes
+query.textNodes();
 ```
 
 <a name="instance-methods-getstack"></a>
 ➜ **instance.getStack(`index`)** &mdash; Return the last element stack for use.
 
-- `index` (`Number`, _Optional_, _Default_: `0`) Index stack to return.
-    - The index is optional. Omitting it will return the last element stack. However, if a previous stack is needed provide the index of the stack to return.
-- **Returns** instance.
+- `index` (`Number`, _Optional_, _Default_: `stack.length - 1`) Index of stack to return.
+    - Returns the last element stack. However, if a previous stack is needed provide the index of the stack to return.
+- **Returns** array containing the elements of the stack.
 
 ```js
 query.getStack(); // use elements for whatever...
@@ -421,8 +404,8 @@ query.getStack(); // use elements for whatever...
 ➜ **instance.getElement(`index`)** &mdash; Return the first element of the last stack for use.
 
 - `index` (`Number`, _Optional_, _Default_: `0`) Index of element in stack to return.
-    - The index is optional. Omitting it will return the first element of the last element stack. Providing an index will return the element at that index.
-- **Returns** instance.
+    - Returns the first element of the last element stack. Providing an index will return the element at that index.
+- **Returns** `HTMLElement` for use.
 
 ```js
 f("#red", "#green").getElement()  // will return --> <#red>
@@ -433,7 +416,7 @@ f("#red", "#green").getElement(1) // will return --> <#green>
 <a name="instance-methods-concat"></a>
 ➜ **instance.concat(`stack`)** &mdash; Combines two stacks into one.
 
-- `stack` (`ElementStack`, _Required_) 
+- `stack` (`FunnelInstance`, _Required_) 
 - **Returns** instance.
 
 ```js
@@ -443,7 +426,7 @@ var elements = sidebar.concat(container); // combined element collection
 ```
 
 <a name="instance-methods-iterable"></a>
-➜ **instance.iterable** &mdash; Property indicating whether the last element stack contains elements.
+➜ **instance.iterable** &mdash; Method indicates whether the last element stack contains elements for use.
 
 - **No Parameters**
 - **Returns** Nothing.
@@ -456,14 +439,14 @@ document.addEventListener("click", function(e) {
 
     // get the targets parents
     var parents = f(target).parents().getStack();
+    
     // combine the parents with the target to return elements 
-    // that contain the class green
-    var filtered = f(target).concat(parents).classes("green");
+    // that contain the class active
+    var filtered = f(target).concat(parents).classes("active");
 
     // if there are elements in the last filtered stack...
-    if (filtered.iterable) {
-        var delegate = filtered.getElement();
-        // do something with delegate...
+    if (filtered.iterable()) {
+        // do something with elements...
     }
 
 }, false);
@@ -477,11 +460,12 @@ document.addEventListener("click", function(e) {
 
     // get the targets parents
     var parents = f(target).parents().getStack();
+    
     // combine the parents with the target to return elements 
-    // that contain the class green
-    var delegate = f(target).concat(parents).classes("green").getElement();
+    // that contain the class active
+    var delegate = f(target).concat(parents).classes("active").getElement();
 
-    // if there are elements in the last filtered stack...
+    // if a delegate exists
     if (delegate) {
         // do something with delegate...
     }
@@ -495,6 +479,25 @@ document.addEventListener("click", function(e) {
 For a better understanding check out `index.html` and `js/source/test.js`. `js/source/test.js` contains the following examples.
 
 **Note**: The following are just examples and is not an exhaustive list.
+
+<a name="usage-examples-toc"></a>
+- [Examples](#usage-examples)
+    - [Only Source Points](#example-only-source-points)
+    - [Exclude Class](#example-exclude-class)
+    - [Input State Checked](#example-input-state-1)
+    - [Input State Hidden](#example-input-state-2)
+    - [Input State Visible](#example-input-state-3)
+    - [Siblings](#example-siblings)
+    - [Parent](#example-parent)
+    - [Parents](#example-parents)
+    - [Tag Type Input](#example-tag-type-input)
+    - [Children](#example-children)
+    - [Attributes 1](#example-attributes-1)
+    - [Attributes 2](#example-attributes-1)
+    - [Multiple Tags](#example-multiple-tags)
+- [Element Filtering](#element-filtering)
+    - [General Filtering](#filtering-general)
+    - [Event Delegation Filtering](#filtering-event-delegation)
 
 <a name="usage-examples"></a>
 ### Examples
@@ -627,7 +630,7 @@ f("#red:all").children().attrs("[type=file]").getStack();
 ```
 
 <a name="example-attributes-2"></a>
-**Attributes 2** &mdash; Get element that have the `class` attribute.
+**Attributes 2** &mdash; Get elements that have the `class` attribute.
 
 - Uses the element with id `tape` as a source point. Using `:all` gets ALL the elements descendants rather than the element itself.
 - Get the children of the collection.
@@ -655,7 +658,7 @@ f("#red:all").children().tags("input", "canvas").getStack();
 
 <a name="filtering-general"></a>
 **General Filtering** &mdash; If `HTMLElements` are provided to FunnelJS, its methods can be used to filter
-the said elements. This is very handy when using event delegation.
+their descendants.
 
 ```html
 <div id="cont">
