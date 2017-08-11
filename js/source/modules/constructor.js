@@ -37,7 +37,12 @@ var Library = class__({
                 if (!parts[1]) elements = elements.concat([cid]);
                 // else apply the filter and add all returned (filtered) elements to array
                 else elements = elements.concat(to_array(this[parts[1]]([cid]))); // i.e. -> this.all()
-            } else if (/^html/.test(data_type)) { // the point is a DOMElement
+            } else if (/^(html|text|comment)/.test(data_type)) { // HTMLElement/TextNode/Comment
+                // **Note**: possibly use the element.nodeType attribute to determine
+                // whether an element, text, comment, or the document was passed in instead?
+                // [https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType]
+                // For now only HTMLElements, Text/Comments nodes can be passed in.
+                //
                 // **Note: the selector can also take in raw element nodes (elements)
                 // it can take N amount of DOM nodes. for example, using
                 // Google Chrome's console this is a valid use case:
